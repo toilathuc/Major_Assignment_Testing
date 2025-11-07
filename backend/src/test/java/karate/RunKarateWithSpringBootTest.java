@@ -30,26 +30,34 @@ public class RunKarateWithSpringBootTest {
 	@Karate.Test
 	Karate testAuthBasic() {
 		return Karate.run("classpath:karate/auth_basic.feature")
-			.systemProperty("baseUrl", "http://localhost:" + port)
-			.relativeTo(getClass());
+				.systemProperty("baseUrl", "http://localhost:" + port)
+				.relativeTo(getClass());
 	}
+
 	// @Karate.Test
 	// Karate testEmployees() {
-	// 	return Karate.run("classpath:karate/employees.feature")
-	// 		.systemProperty("baseUrl", "http://localhost:" + port)
-	// 		.relativeTo(getClass());
+	// return Karate.run("classpath:karate/employees.feature")
+	// .systemProperty("baseUrl", "http://localhost:" + port)
+	// .relativeTo(getClass());
 	// }
 	@Karate.Test
 	Karate testDepartments() {
 		return Karate.run("classpath:karate/departmentsAPI.feature")
-			.systemProperty("baseUrl", "http://localhost:" + port)
-			.relativeTo(getClass());
+				.systemProperty("baseUrl", "http://localhost:" + port)
+				.relativeTo(getClass());
 	}
 
 	@Karate.Test
 	Karate testEmployees() {
 		return Karate.run("classpath:karate/employees.feature")
-			.systemProperty("baseUrl", "http://localhost:" + port)
-			.relativeTo(getClass());
+				.systemProperty("baseUrl", "http://localhost:" + port)
+				.relativeTo(getClass());
+	}
+
+	@Karate.Test
+	Karate testHomeRedirect() {
+		return Karate.run("classpath:karate/home.feature")
+				.systemProperty("baseUrl", "http://localhost:" + port)
+				.relativeTo(getClass());
 	}
 }
