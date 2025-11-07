@@ -114,3 +114,18 @@ Scenario: Update information of a specific employee
     When method GET
     Then status 404
 
+Scenario: Update non-existent employee returns 404
+  * def missingId = ts + 9999
+  Given url baseUrl + '/api/employees/' + missingId
+  And request employee
+  When method PUT
+  Then status 404
+  * print response
+
+Scenario: Delete non-existent employee returns 404
+  * def missingId = ts + 8888
+  Given url baseUrl + '/api/employees/' + missingId
+  When method DELETE
+  Then status 404
+  * print response
+
