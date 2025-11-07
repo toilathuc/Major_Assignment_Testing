@@ -81,3 +81,18 @@ Scenario: Check ID non exists
   Then status 404
   * print response
 
+Scenario: Update non-existent department returns 404
+  * def missingId = now + 9999
+  Given url baseUrl + '/api/departments/' + missingId
+  And request { name: 'Ghost Department' }
+  When method PUT
+  Then status 404
+  * print response
+
+Scenario: Delete non-existent department returns 404
+  * def missingId = now + 8888
+  Given url baseUrl + '/api/departments/' + missingId
+  When method DELETE
+  Then status 404
+  * print response
+

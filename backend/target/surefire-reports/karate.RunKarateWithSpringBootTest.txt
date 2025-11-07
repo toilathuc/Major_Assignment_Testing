@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: karate.RunKarateWithSpringBootTest
 -------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.92 s - in karate.RunKarateWithSpringBootTest
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.155 s - in karate.RunKarateWithSpringBootTest
