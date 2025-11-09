@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: Employee-Management-Test
+  
+  # Use H2 in-memory database for tests
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  
+  # JPA/Hibernate config for H2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  
+  h2:
+    console:
+      enabled: true
+  
+  # Disable MongoDB for tests
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+
+# JWT settings for tests (deterministic)
+jwt:
+  secret: test-secret-key-for-jwt-tokens-in-testing-environment
+  expiration: 60000
+
+# Random port for tests
+server:
+  port: 0
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.example.employeemanagement: DEBUG

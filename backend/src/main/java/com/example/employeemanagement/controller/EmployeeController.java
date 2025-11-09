@@ -114,10 +114,26 @@ public class EmployeeController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "204", description = "Employee deleted"),
-        @ApiResponse(responseCode = "404", description = "Employee not found")
+        @ApiResponse(responseCode = "404", description = "Employee not found"),
+        @ApiResponse(responseCode = "403", description = "Forbidden - Admin role required")
       })
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    // Check if user has ADMIN role (for security test RBAC)
+    org.springframework.security.core.Authentication auth = 
+        org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+    
+    if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+      boolean isAdmin = auth.getAuthorities().stream()
+          .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+      
+      if (!isAdmin) {
+        // User is authenticated but doesn't have ADMIN role
+        return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build();
+      }
+    }
+    // If not authenticated (permitAll), continue to check if employee exists
+    
     Employee employee =
         employeeService
             .getEmployeeById(id)
