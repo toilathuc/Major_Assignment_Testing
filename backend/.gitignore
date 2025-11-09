@@ -20,6 +20,15 @@ config.properties
 *.iml
 *.ipr
 
+target/
+*.class
+*.log
+*.dump
+
+.vscode/
+.idea/
+
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
