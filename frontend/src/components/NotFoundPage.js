@@ -18,7 +18,7 @@ const NotFoundPage = () => {
         paddingBottom: '4rem',
       }}
     >
-      <Typography variant="h2" color="error" gutterBottom>
+      <Typography id="notfound-title" variant="h2" color="error" gutterBottom>
         404
       </Typography>
       <Typography variant="h5" gutterBottom>
@@ -27,7 +27,7 @@ const NotFoundPage = () => {
       <Typography variant="body1" paragraph>
         It seems the page you are trying to access is not available or you have typed the wrong URL.
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleGoHome}>
+      <Button id="notfound-back-home" variant="contained" color="primary" onClick={handleGoHome}>
         Go Back to Home
       </Button>
     </Box>

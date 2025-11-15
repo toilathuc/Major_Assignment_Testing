@@ -95,11 +95,11 @@ const EmployeeForm = () => {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' } }}>
       <h2>{id ? 'Edit Employee' : 'Add Employee'}</h2>
-      <TextField label="First Name" name="firstName" value={employee.firstName} onChange={handleChange} required />
-      <TextField label="Last Name" name="lastName" value={employee.lastName} onChange={handleChange} required />
-      <TextField label="Email" name="email" type="email" value={employee.email} onChange={handleChange} required />
-      <TextField label="Age" name="age" type="number" value={employee.age} onChange={handleChange} required inputProps={{ min: 1, max: 150 }} />
-      <TextField select label="Department" name="department.id" value={employee.department.id || ''} onChange={handleChange} required>
+      <TextField id="firstName" label="First Name" name="firstName" value={employee.firstName} onChange={handleChange} required />
+      <TextField id="lastName" label="Last Name" name="lastName" value={employee.lastName} onChange={handleChange} required />
+      <TextField id="email" label="Email" name="email" type="email" value={employee.email} onChange={handleChange} required />
+      <TextField id="age" label="Age" name="age" type="number" value={employee.age} onChange={handleChange} required inputProps={{ min: 1, max: 150 }} />
+      <TextField id="department" select label="Department" name="department.id" value={employee.department.id || ''} onChange={handleChange} required>
         <MenuItem value="">Select Department</MenuItem>
         {departments.map(department => (
           <MenuItem key={department.id} value={department.id}>
@@ -107,7 +107,7 @@ const EmployeeForm = () => {
           </MenuItem>
         ))}
       </TextField>
-      <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }}>
+      <Button id="employee-save-btn" type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }}>
         Save
       </Button>
     </Box>
