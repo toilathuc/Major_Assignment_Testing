@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://employee-management-app-gdm5.onrender.com/api';
-const API_URL = `${API_BASE_URL}/employees`;
+const API_URL = 'http://localhost:8080/api/employees';
 
 // Get all employees
 export const getAllEmployees = async () => {

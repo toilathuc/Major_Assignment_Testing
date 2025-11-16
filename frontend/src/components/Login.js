@@ -16,11 +16,8 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://employee-management-app-gdm5.onrender.com/api';
-    const AUTH_URL = API_BASE_URL.replace('/api', ''); // Remove /api suffix for auth endpoint
-
     try {
-      const response = await fetch(`${AUTH_URL}/authenticate`, {
+      const response = await fetch('http://localhost:8080/authenticate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -61,7 +58,11 @@ const Login = () => {
               value={username}
               onChange={e => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              InputProps={{ style: { fontFamily: 'Poppins, sans-serif' } }}
+              InputProps={{
+                style: {
+                  fontFamily: 'Poppins, sans-serif',
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -78,7 +79,9 @@ const Login = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-                style: { fontFamily: 'Poppins, sans-serif' },
+                style: {
+                  fontFamily: 'Poppins, sans-serif',
+                },
               }}
             />
             {loading ? (
