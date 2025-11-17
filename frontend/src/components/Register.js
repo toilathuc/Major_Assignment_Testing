@@ -34,7 +34,6 @@ const Register = () => {
       setLoading(false);
 
       if (response.ok) {
-        alert('User registered successfully. Please login to continue.');
         navigate('/login'); // Redirect to login page after successful registration
       } else {
         const data = await response.json();
@@ -63,6 +62,7 @@ const Register = () => {
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
+              id="username" // <-- THÊM ID
               fullWidth
               label="Username"
               value={username}
@@ -75,6 +75,7 @@ const Register = () => {
               }}
             />
             <TextField
+              id="password" // <-- THÊM ID
               fullWidth
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -95,6 +96,7 @@ const Register = () => {
               }}
             />
             <TextField
+              id="confirmPassword" // <-- THÊM ID
               fullWidth
               label="Confirm Password"
               type={showConfirmPassword ? 'text' : 'password'}
@@ -119,7 +121,13 @@ const Register = () => {
                 <CircularProgress />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button
+                id="register-submit-btn" // <-- THÊM ID
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Register
               </Button>
             )}

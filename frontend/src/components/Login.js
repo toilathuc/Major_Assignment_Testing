@@ -29,7 +29,6 @@ const Login = () => {
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store token in localStorage
         localStorage.setItem('EMSusername', username); // Store username in localStorage
-        alert('Login successful. Welcome!');
         navigate('/dashboard'); // Correct navigation after login success
       } else {
         setError('Invalid credentials. Please try again.');
@@ -53,6 +52,7 @@ const Login = () => {
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
+              id="username"
               fullWidth
               label="Username"
               value={username}
@@ -65,6 +65,7 @@ const Login = () => {
               }}
             />
             <TextField
+              id="password"
               fullWidth
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -89,7 +90,7 @@ const Login = () => {
                 <CircularProgress />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button id="login-submit-btn" fullWidth variant="contained" color="primary" type="submit">
                 Login
               </Button>
             )}

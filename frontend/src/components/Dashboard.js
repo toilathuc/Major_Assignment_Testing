@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bar, Pie, Line } from 'react-chartjs-2';
 import { getAllEmployees } from '../services/employeeService';
 import { getAllDepartments } from '../services/departmentService';
@@ -8,6 +9,7 @@ import { Card, CardContent, Grid, Typography, Box, CircularProgress } from '@mui
 Chart.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [employeeCount, setEmployeeCount] = useState(0);
   const [departmentCount, setDepartmentCount] = useState(0);
   const [averageAge, setAverageAge] = useState(0);
@@ -17,6 +19,14 @@ const Dashboard = () => {
   const [genderData] = useState({ male: 175, female: 120 });
   const [jobSatisfactionData] = useState({ satisfied: 215, neutral: 50, dissatisfied: 30 });
   const [remoteWorkData] = useState({ onsite: 145, remote: 70, hybrid: 80 });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login', { replace: true });
+      return; // prevent fetchData when logged out
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -213,7 +223,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ marginTop: '2rem' }}>
-      <Typography variant="h4" component="h1" sx={{ marginBottom: '1rem', textAlign: 'center', fontWeight: 600 }}>
+      <Typography id="dashboard-title" variant="h4" component="h1" sx={{ marginBottom: '1rem', textAlign: 'center', fontWeight: 600 }}>
         Overview Dashboard
       </Typography>
       <Grid container spacing={3}>
@@ -224,7 +234,7 @@ const Dashboard = () => {
               <Typography variant="h6" textAlign="center">
                 Total Employees
               </Typography>
-              <Typography variant="h4" textAlign="center">
+              <Typography id="metric-total-employees" variant="h4" textAlign="center">
                 {employeeCount}
               </Typography>
             </CardContent>
@@ -237,7 +247,7 @@ const Dashboard = () => {
               <Typography variant="h6" textAlign="center">
                 Average Age
               </Typography>
-              <Typography variant="h4" textAlign="center">
+              <Typography id="metric-average-age" variant="h4" textAlign="center">
                 {averageAge}
               </Typography>
             </CardContent>
@@ -250,7 +260,7 @@ const Dashboard = () => {
               <Typography variant="h6" textAlign="center">
                 Total Departments
               </Typography>
-              <Typography variant="h4" textAlign="center">
+              <Typography id="metric-total-departments" variant="h4" textAlign="center">
                 {departmentCount}
               </Typography>
             </CardContent>
@@ -262,7 +272,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Total Overview</Typography>
-              <Bar data={totalOverviewData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 30 } } }} />
+              <Bar id="chart-total-overview" data={totalOverviewData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 30 } } }} />
             </CardContent>
           </Card>
         </Grid>
@@ -271,7 +281,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Employee Count by Age Range</Typography>
-              <Bar data={ageRangeChartData} />
+              <Bar id="chart-age-range" data={ageRangeChartData} />
             </CardContent>
           </Card>
         </Grid>
@@ -280,7 +290,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Employee Growth Over Time</Typography>
-              {employeeGrowthData ? <Bar data={employeeGrowthData} /> : <Typography>No data available</Typography>}
+              {employeeGrowthData ? <Bar id="chart-growth" data={employeeGrowthData} /> : <Typography>No data available</Typography>}
             </CardContent>
           </Card>
         </Grid>
@@ -289,7 +299,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Average Age of Employees</Typography>
-              <Bar data={averageAgeChartData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 100 } } }} />
+              <Bar id="chart-average-age" data={averageAgeChartData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 100 } } }} />
             </CardContent>
           </Card>
         </Grid>
@@ -298,7 +308,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Age Range Distribution</Typography>
-              <Pie data={pieChartData} />
+              <Pie id="chart-age-range-pie" data={pieChartData} />
             </CardContent>
           </Card>
         </Grid>
@@ -307,7 +317,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Employee Growth Trend</Typography>
-              {lineChartData ? <Line data={lineChartData} /> : <Typography>No data available</Typography>}
+              {lineChartData ? <Line id="chart-growth-line" data={lineChartData} /> : <Typography>No data available</Typography>}
             </CardContent>
           </Card>
         </Grid>
@@ -316,7 +326,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Gender Distribution</Typography>
-              <Bar data={genderChartData} options={{ scales: { y: { beginAtZero: true } } }} />
+              <Bar id="chart-gender" data={genderChartData} options={{ scales: { y: { beginAtZero: true } } }} />
             </CardContent>
           </Card>
         </Grid>
@@ -325,7 +335,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Job Satisfaction Levels</Typography>
-              <Pie data={jobSatisfactionChartData} />
+              <Pie id="chart-job-satisfaction" data={jobSatisfactionChartData} />
             </CardContent>
           </Card>
         </Grid>
@@ -334,7 +344,7 @@ const Dashboard = () => {
           <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
             <CardContent>
               <Typography variant="h6">Remote Work Preference</Typography>
-              <Pie data={remoteWorkChartData} />
+              <Pie id="chart-remote-work" data={remoteWorkChartData} />
             </CardContent>
           </Card>
         </Grid>

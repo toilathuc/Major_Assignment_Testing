@@ -58,6 +58,7 @@ const Navbar = () => {
         </ListItem>
         <ListItem button component={Link} to="/login" selected={isActive('/login')} onClick={handleDrawerToggle}>
           <ListItemText
+            id={isLoggedIn ? 'drawer-logout' : 'drawer-login'}
             primary={isLoggedIn ? 'Logout' : 'Login'}
             sx={{ color: isLoggedIn ? 'red' : isActive('/login') ? '#ff9800' : 'white' }}
             onClick={isLoggedIn ? handleLogout : null}
@@ -91,7 +92,7 @@ const Navbar = () => {
 
           {/* Render drawer icon for mobile view */}
           {isMobile ? (
-            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
+            <IconButton id="nav-drawer-toggle" color="inherit" edge="start" onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
           ) : (
@@ -160,6 +161,7 @@ const Navbar = () => {
               {/* Conditional Login/Logout Button */}
               {isLoggedIn ? (
                 <Button
+                  id="nav-logout-btn"
                   onClick={handleLogout}
                   sx={{
                     fontSize: '1rem',

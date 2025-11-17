@@ -142,6 +142,7 @@ const EmployeeList = () => {
         Add Employee
       </Button>
       <TextField
+        id="employee-search"
         label="Search for an employee..."
         variant="outlined"
         value={searchTerm}
@@ -158,7 +159,7 @@ const EmployeeList = () => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody id="employee-table-body">
             {filteredEmployees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(employee => (
               <TableRow key={employee.id}>
                 <TableCell>{employee.firstName}</TableCell>

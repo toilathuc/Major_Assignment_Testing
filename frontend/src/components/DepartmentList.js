@@ -139,6 +139,7 @@ const DepartmentList = () => {
         Add Department
       </Button>
       <TextField
+        id="department-search"
         label="Search for a department"
         variant="outlined"
         value={searchTerm}
@@ -153,7 +154,7 @@ const DepartmentList = () => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody id="department-table-body">
             {filteredDepartments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(department => (
               <TableRow key={department.id}>
                 <TableCell>{department.name}</TableCell>

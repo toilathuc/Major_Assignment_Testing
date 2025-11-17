@@ -126,7 +126,7 @@ const Profile = ({ theme }) => {
         transition: 'background-color 0.3s ease',
       }}
     >
-      <Typography variant="h4" sx={{ textAlign: 'center', marginBottom: 4 }}>
+      <Typography id="profile-title" variant="h4" sx={{ textAlign: 'center', marginBottom: 4 }}>
         Welcome, {profileData.username}!
       </Typography>
 
@@ -159,7 +159,7 @@ const Profile = ({ theme }) => {
           Profile Information
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1, fontSize: '16px' }}>
+        <Typography id="profile-username" variant="body1" sx={{ mb: 1, fontSize: '16px' }}>
           <strong>Username:</strong> {profileData.username}
         </Typography>
 
@@ -185,7 +185,7 @@ const Profile = ({ theme }) => {
           <strong>Thank you for using our platform today! 🚀</strong>
         </Typography>
 
-        <Button variant="contained" color="secondary" sx={{ mt: 3 }} onClick={handleLogout}>
+        <Button id="profile-logout-btn" variant="contained" color="secondary" sx={{ mt: 3 }} onClick={handleLogout}>
           Logout
         </Button>
       </Box>
