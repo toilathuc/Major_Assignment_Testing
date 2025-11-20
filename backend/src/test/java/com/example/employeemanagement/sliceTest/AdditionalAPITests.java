@@ -1,4 +1,4 @@
-package com.example.employeemanagement;
+package com.example.employeemanagement.sliceTest;
 
 import com.example.employeemanagement.model.Department;
 import com.example.employeemanagement.model.Employee;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.setRemoveAssertJRelatedElementsFromStackTrace;
 
 /** This class implements unit tests for the EmployeeManagementApplication. */
 @DataJpaTest

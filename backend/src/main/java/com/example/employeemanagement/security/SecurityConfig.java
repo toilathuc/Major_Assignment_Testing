@@ -65,5 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .anyRequest()
         .permitAll(); // Allow access to all routes without authentication (for now)
+      http.headers().frameOptions().disable();
   }
 }
