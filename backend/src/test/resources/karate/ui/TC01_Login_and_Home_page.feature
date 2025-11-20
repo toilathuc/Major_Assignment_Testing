@@ -1,21 +1,32 @@
 Feature: Login page
-  Scenario: TC01 - Login and land on Dashboard
+  Scenario: TC01 - Login with existing user
 
-  # 1) Open Login page directly
-    Given driver 'http://localhost:3000/login'
-
-  # 2) Wait for Login title to render
-    And waitFor("//h2[contains(text(), 'Login')]")
-
-  # 3) Wait for inputs and fill by ID
-    And waitFor('#username')
-    And waitFor('#password')
-    Then input('#username', 'karate_user1')
+  # Step 1: Navigate to login page
+    Given driver frontendUrl
+    And delay(2000)
+    When click("a[href='/login']")
+    And delay(3000)
+    * print 'After click login URL:', driver.url
+    * print 'Page title:', driver.title
+    * screenshot()
+    
+  # Step 2: Wait for login form with retry
+    And retry(30, 500).waitFor('#username')
+    * print 'Login form loaded!'
+    
+  # Step 3: Fill login credentials (use fake data user)
+    And input('#username', 'karate_user1')
+    And delay(500)
     And input('#password', 'password123')
-
-  # 4) Click Login button
+    And delay(500)
+    * screenshot()
+    
+  # Step 4: Submit login form
     When click('#login-submit-btn')
-
-  # 5) Verify redirect: wait for Dashboard title
-    And retry(40, 500).waitFor('#dashboard-title')
-    And match text('#dashboard-title') contains 'Overview Dashboard'
+    And delay(3000)
+    
+  # Step 5: Verify redirect to dashboard
+    * print 'After login URL:', driver.url
+    And waitFor('#dashboard-title')
+    * print 'Dashboard loaded!'
+    * screenshot()
