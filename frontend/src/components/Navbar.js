@@ -11,7 +11,6 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Check if screen width is below 1000px
   const isMobile = useMediaQuery('(max-width:1000px)');
 
   const isActive = path => currentPath === path;
@@ -39,42 +38,109 @@ const Navbar = () => {
   };
 
   const drawerContent = (
-    <Box sx={{ width: 250, backgroundColor: '#3f51b5', height: '100%', color: 'white' }} role="presentation">
+    <Box
+      id="navbar-mobile-drawer"
+      sx={{ width: 250, backgroundColor: '#3f51b5', height: '100%', color: 'white' }}
+      role="presentation"
+    >
       <List>
-        <ListItem button component={Link} to="/" selected={isActive('/')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-home"
+          button
+          component={Link}
+          to="/"
+          selected={isActive('/')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Home" sx={{ color: isActive('/') ? '#ff9800' : 'white' }} />
         </ListItem>
-        <ListItem button component={Link} to="/dashboard" selected={isActive('/dashboard')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-dashboard"
+          button
+          component={Link}
+          to="/dashboard"
+          selected={isActive('/dashboard')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Dashboard" sx={{ color: isActive('/dashboard') ? '#ff9800' : 'white' }} />
         </ListItem>
-        <ListItem button component={Link} to="/employees" selected={isActive('/employees')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-employees"
+          button
+          component={Link}
+          to="/employees"
+          selected={isActive('/employees')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Employees" sx={{ color: isActive('/employees') ? '#ff9800' : 'white' }} />
         </ListItem>
-        <ListItem button component={Link} to="/departments" selected={isActive('/departments')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-departments"
+          button
+          component={Link}
+          to="/departments"
+          selected={isActive('/departments')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Departments" sx={{ color: isActive('/departments') ? '#ff9800' : 'white' }} />
         </ListItem>
-        <ListItem button component={Link} to="/profile" selected={isActive('/profile')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-profile"
+          button
+          component={Link}
+          to="/profile"
+          selected={isActive('/profile')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Profile" sx={{ color: isActive('/profile') ? '#ff9800' : 'white' }} />
         </ListItem>
-        <ListItem button component={Link} to="/login" selected={isActive('/login')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-login-or-logout"
+          button
+          component={Link}
+          to="/login"
+          selected={isActive('/login')}
+          onClick={isLoggedIn ? handleLogout : handleDrawerToggle}
+        >
           <ListItemText
             primary={isLoggedIn ? 'Logout' : 'Login'}
             sx={{ color: isLoggedIn ? 'red' : isActive('/login') ? '#ff9800' : 'white' }}
-            onClick={isLoggedIn ? handleLogout : null}
           />
         </ListItem>
-        <ListItem button component={Link} to="/register" selected={isActive('/register')} onClick={handleDrawerToggle}>
+
+        <ListItem
+          id="navbar-mobile-register"
+          button
+          component={Link}
+          to="/register"
+          selected={isActive('/register')}
+          onClick={handleDrawerToggle}
+        >
           <ListItemText primary="Register" sx={{ color: isActive('/register') ? '#ff9800' : 'white' }} />
         </ListItem>
+
       </List>
     </Box>
   );
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: '#3f51b5', padding: '0.5rem 0' }}>
+      <AppBar
+        id="navbar-container"
+        position="static"
+        sx={{ backgroundColor: '#3f51b5', padding: '0.5rem 0' }}
+      >
         <Toolbar>
+
+          {/* Brand Logo */}
           <Typography
+            id="navbar-brand"
             variant="h6"
             component={Link}
             to="/"
@@ -89,119 +155,104 @@ const Navbar = () => {
             Employee Management System
           </Typography>
 
-          {/* Render drawer icon for mobile view */}
+          {/* MOBILE NAV BUTTON */}
           {isMobile ? (
-            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
+            <IconButton
+              id="navbar-mobile-menu-btn"
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+            >
               <MenuIcon />
             </IconButton>
           ) : (
-            // Render full menu for desktop view
-            <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Box id="navbar-desktop-menu" sx={{ display: 'flex', gap: '1rem' }}>
+
               <Button
-                color={isActive('/') ? 'primary' : 'inherit'}
+                id="navbar-home"
                 component={Link}
                 to="/"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/') ? '#ff9800' : 'white' }}
               >
                 Home
               </Button>
+
               <Button
-                color={isActive('/dashboard') ? 'primary' : 'inherit'}
+                id="navbar-dashboard"
                 component={Link}
                 to="/dashboard"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/dashboard') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/dashboard') ? '#ff9800' : 'white' }}
               >
                 Dashboard
               </Button>
+
               <Button
-                color={isActive('/employees') ? 'primary' : 'inherit'}
+                id="navbar-employees"
                 component={Link}
                 to="/employees"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/employees') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/employees') ? '#ff9800' : 'white' }}
               >
                 Employees
               </Button>
+
               <Button
-                color={isActive('/departments') ? 'primary' : 'inherit'}
+                id="navbar-departments"
                 component={Link}
                 to="/departments"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/departments') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/departments') ? '#ff9800' : 'white' }}
               >
                 Departments
               </Button>
+
               <Button
-                color={isActive('/profile') ? 'primary' : 'inherit'}
+                id="navbar-profile"
                 component={Link}
                 to="/profile"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/profile') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/profile') ? '#ff9800' : 'white' }}
               >
                 Profile
               </Button>
-              {/* Conditional Login/Logout Button */}
+
               {isLoggedIn ? (
                 <Button
+                  id="navbar-logout"
                   onClick={handleLogout}
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: 'red', // Make logout button red
-                  }}
+                  sx={{ color: 'red' }}
                 >
                   Logout
                 </Button>
               ) : (
                 <Button
-                  color={isActive('/login') ? 'primary' : 'inherit'}
+                  id="navbar-login"
                   component={Link}
                   to="/login"
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: isActive('/login') ? '#ff9800' : 'inherit',
-                  }}
+                  sx={{ color: isActive('/login') ? '#ff9800' : 'white' }}
                 >
                   Login
                 </Button>
               )}
+
               <Button
-                color={isActive('/register') ? 'primary' : 'inherit'}
+                id="navbar-register"
                 component={Link}
                 to="/register"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/register') ? '#ff9800' : 'inherit',
-                }}
+                sx={{ color: isActive('/register') ? '#ff9800' : 'white' }}
               >
                 Register
               </Button>
+
             </Box>
           )}
         </Toolbar>
       </AppBar>
 
-      {/* Drawer for mobile view */}
-      <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
+      {/* Drawer for mobile */}
+      <Drawer
+        id="navbar-drawer"
+        anchor="left"
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
+      >
         {drawerContent}
       </Drawer>
     </>

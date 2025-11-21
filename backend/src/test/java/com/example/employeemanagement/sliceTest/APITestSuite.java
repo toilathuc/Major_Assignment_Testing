@@ -1,22 +1,23 @@
-package com.example.employeemanagement;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package com.example.employeemanagement.sliceTest;
 
 import com.example.employeemanagement.model.Department;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.repository.DepartmentRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
-import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /** This class implements unit tests for the EmployeeManagementApplication. */
 @DataJpaTest
 @Transactional
-public class DepartmentManagementApplicationTests {
+public class APITestSuite {
 
   /** The employee repository. */
   @Autowired private EmployeeRepository employeeRepository;
@@ -195,31 +196,6 @@ public class DepartmentManagementApplicationTests {
     employee1.setFirstName("John");
     employee1.setLastName("Doe");
     employee1.setEmail("jane.doe@example.com");
-    employee1.setDepartment(department1);
-    employeeRepository.save(employee1);
-
-    assertThat(employeeRepository.findById(employee1.getId()).get().getDepartment().getName())
-        .isEqualTo("HR");
-    assertThat(employeeRepository.findById(employee1.getId()).get().getDepartment().getName())
-        .isNotEqualTo("Finance");
-  }
-
-  /** Test the find employees by department name method. */
-  @Test
-  void shouldFindEmployeesByDepartmentName2() {
-    Department department1 = new Department();
-    department1.setName("HR");
-    department1 = departmentRepository.save(department1);
-
-    Department department2 = new Department();
-    department2.setName("Finance");
-    department2 = departmentRepository.save(department2);
-
-    Employee employee1 = new Employee();
-    employee1.setFirstName("John");
-    employee1.setLastName("Doe");
-    employee1.setEmail("jane.doe@example.com");
-
     employee1.setDepartment(department1);
     employeeRepository.save(employee1);
 

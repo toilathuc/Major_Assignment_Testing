@@ -111,7 +111,29 @@
       <artifactId>spring-security-crypto</artifactId>
     </dependency>
 
-    <!-- H2 Database for testing -->
+      <!-- =============================== -->
+      <!-- JACKSON 2.15.x (FIX ERROR)     -->
+      <!-- =============================== -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.15.2</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.15.2</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+          <version>2.15.2</version>
+      </dependency>
+
+
+      <!-- H2 Database for testing -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
@@ -125,6 +147,35 @@
   <version>1.5.0</version>
   <scope>test</scope>
 </dependency>
+      <!-- KARATE + GATLING -->
+      <dependency>
+          <groupId>io.karatelabs</groupId>
+          <artifactId>karate-gatling</artifactId>
+          <version>1.5.0</version>
+          <scope>test</scope>
+      </dependency>
+
+      <!-- =============================== -->
+      <!-- GATLING                         -->
+      <!-- =============================== -->
+      <dependency>
+          <groupId>io.gatling.highcharts</groupId>
+          <artifactId>gatling-charts-highcharts</artifactId>
+          <version>3.10.4</version>
+          <scope>test</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>io.gatling</groupId>
+          <artifactId>gatling-app</artifactId>
+          <version>3.10.4</version>
+          <scope>test</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-jdbc</artifactId>
+      </dependency>
 
   </dependencies>
 

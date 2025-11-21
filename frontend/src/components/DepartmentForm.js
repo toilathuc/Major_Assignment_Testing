@@ -4,70 +4,111 @@ import { addDepartment, getDepartmentById, updateDepartment } from '../services/
 import { TextField, Button, CircularProgress, Box } from '@mui/material';
 
 const DepartmentForm = () => {
-  const [department, setDepartment] = useState({ name: '' });
+  const [department, setDepartment] = useState({
+    id: '',
+    name: ''
+  });
+
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isLoading, setIsLoading] = useState(false);
 
+  // ===== LOAD DATA IF EDIT MODE =====
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         try {
-          const departmentData = await getDepartmentById(id);
-          setDepartment(departmentData);
+          const res = await getDepartmentById(id);
+          setDepartment({
+            id: res.id,
+            name: res.name
+          });
         } catch (error) {
-          console.error('Error fetching department data:', error);
-        } finally {
-          setIsLoading(false); // Stop loading
+          console.error('Error loading department:', error);
         }
+        setIsLoading(false);
       }
     };
     fetchData();
   }, [id]);
 
+  // ===== HANDLE CHANGE =====
   const handleChange = e => {
-    setDepartment({ ...department, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setDepartment(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
+  // ===== SAVE =====
   const handleSubmit = async e => {
     e.preventDefault();
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
+
     try {
       if (id) {
         await updateDepartment(id, department);
       } else {
         await addDepartment(department);
       }
-      setIsLoading(false); // Stop loading
       navigate('/departments');
-    } catch (error) {
-      console.error('Error saving department:', error);
-      setIsLoading(false); // Stop loading
+    } catch (err) {
+      console.error('Error saving department:', err);
     }
+
+    setIsLoading(false);
   };
 
-  // If loading, show centered spinner
+  // ===== LOADING OVERLAY =====
   if (isLoading) {
     return (
       <Box
+        id="department-form-loading"
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100vh',
+          height: '100vh'
         }}
       >
-        <CircularProgress />
+        <CircularProgress id="department-form-spinner" />
       </Box>
     );
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' }, maxWidth: '400px', margin: '0 auto' }}>
-      <h2>{id ? 'Edit Department' : 'Add Department'}</h2>
-      <TextField label="Department Name" name="name" value={department.name} onChange={handleChange} required fullWidth />
-      <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }}>
+    <Box
+      id="department-form-container"
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' },
+        maxWidth: '400px',
+        margin: '0 auto'
+      }}
+    >
+      <h2 id="department-form-title">
+        {id ? 'Edit Department' : 'Add Department'}
+      </h2>
+
+      <TextField
+        id="department-name-input"
+        label="Department Name"
+        name="name"
+        value={department.name}
+        onChange={handleChange}
+        required
+      />
+
+      <Button
+        id="department-save-btn"
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ marginTop: '1rem' }}
+      >
         Save
       </Button>
     </Box>

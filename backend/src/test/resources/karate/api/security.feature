@@ -5,7 +5,7 @@ Feature: Security smoke tests
     * def port = Java.type('java.lang.System').getProperty('karate.server.port')
     * def baseUrl = 'http://localhost:' + port
     # perform setup once to obtain tokens used across scenarios
-    * def securitySetup = callonce read('classpath:karate/security-setup.feature')
+    * def securitySetup = callonce read('classpath:karate/api/security-setup.feature')
     * def userToken = securitySetup.userToken
     * def adminToken = securitySetup.adminToken
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, CircularProgress, Box } from '@mui/material';
+import { TextField, Button, CircularProgress, Box, Typography } from '@mui/material';
 
 const NewDepartmentForm = () => {
   const [department, setDepartment] = useState({ name: '' });
@@ -8,22 +8,19 @@ const NewDepartmentForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Handle input change for department name
   const handleChange = e => {
     setDepartment({ ...department, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission to create a new department
   const handleSubmit = async e => {
     e.preventDefault();
-    setIsLoading(true); // Start loading spinner
-    setError(null); // Reset any previous error
+    setIsLoading(true);
+    setError(null);
 
     const newDepartment = {
-      // generate random id from 0-9999
       id: Math.floor(Math.random() * 10000),
       name: department.name,
-      employees: [], // Empty array for employees
+      employees: [],
     };
 
     try {
@@ -33,30 +30,62 @@ const NewDepartmentForm = () => {
           Accept: '*/*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newDepartment), // Send the new department data as JSON
+        body: JSON.stringify(newDepartment),
       });
 
       if (!response.ok) {
         throw new Error('Failed to create department');
       }
 
-      // Navigate to the departments list after successful creation
       navigate('/departments');
     } catch (error) {
       console.error('Error:', error);
       setError('Failed to create department. Please try again.');
     } finally {
-      setIsLoading(false); // Stop loading spinner
+      setIsLoading(false);
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' }, maxWidth: '400px', margin: '0 auto' }}>
-      <h2>Create New Department</h2>
-      <TextField label="Department Name" name="name" value={department.name} onChange={handleChange} required fullWidth />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }} disabled={isLoading}>
-        {isLoading ? <CircularProgress size={24} /> : 'Save'}
+    <Box
+      id="new-department-form"
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' },
+        maxWidth: '400px',
+        margin: '0 auto'
+      }}
+    >
+      <Typography id="new-department-title" variant="h5" sx={{ marginBottom: '1rem', textAlign: 'center' }}>
+        Create New Department
+      </Typography>
+
+      <TextField
+        id="new-department-name-input"
+        label="Department Name"
+        name="name"
+        value={department.name}
+        onChange={handleChange}
+        required
+        fullWidth
+      />
+
+      {error && (
+        <Typography id="new-department-error" sx={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>
+          {error}
+        </Typography>
+      )}
+
+      <Button
+        id="new-department-submit-btn"
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ marginTop: '1rem', width: '100%' }}
+        disabled={isLoading}
+      >
+        {isLoading ? <CircularProgress id="new-department-loading" size={24} /> : 'Save'}
       </Button>
     </Box>
   );

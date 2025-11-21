@@ -60,7 +60,9 @@ const DepartmentList = () => {
     setDeletingDepartmentId(id);
     try {
       await deleteDepartment(id);
-      setDepartments(prevDepartments => prevDepartments.filter(department => department.id !== id));
+      setDepartments(prev =>
+        prev.filter(dep => dep.id !== id)
+      );
     } catch (error) {
       console.error('Error deleting department:', error);
     }
@@ -69,23 +71,34 @@ const DepartmentList = () => {
 
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
-    setPage(0); // Reset page to 0 whenever search term changes
+    setPage(0);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const handleChangePage = (event, newPage) => setPage(newPage);
 
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset page to 0 when rows per page changes
+    setPage(0);
   };
 
-  const filteredDepartments = departments.filter(department => department.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredDepartments = departments.filter(dep =>
+    dep.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  const handleCloseSnackbar = () => {
+    setShowSnackbar(false);
+    navigate('/login', { replace: true });
+  };
+
+  const handleLoginRedirect = () => {
+    navigate('/login');
+  };
+
+  // Loading overlay
   if (loading) {
     return (
       <Box
+        id="department-list-loading"
         sx={{
           position: 'fixed',
           top: 0,
@@ -99,91 +112,114 @@ const DepartmentList = () => {
           zIndex: 1000,
         }}
       >
-        <CircularProgress />
+        <CircularProgress id="department-list-spinner" />
       </Box>
     );
   }
 
-  const handleCloseSnackbar = () => {
-    setShowSnackbar(false);
-    navigate('/login', { replace: true });
-  };
-
-  const handleLoginRedirect = () => {
-    navigate('/login');
-  };
-
   return (
-    <Box>
-      <Snackbar open={showSnackbar} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} sx={{ mt: 9 }}>
-        <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
-          You must be logged in to access the employee list.{' '}
+    <Box id="department-list-container">
+      {/* Login required Snackbar */}
+      <Snackbar
+        id="department-list-snackbar"
+        open={showSnackbar}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{ mt: 9 }}
+      >
+        <Alert severity="warning" sx={{ width: '100%' }} onClose={handleCloseSnackbar}>
+          You must be logged in to access the department list.{' '}
           <span
+            id="department-login-link"
             onClick={handleLoginRedirect}
             style={{
               color: '#3f51b5',
               textDecoration: 'underline',
               cursor: 'pointer',
-              transition: 'color 0.1s',
             }}
-            onMouseEnter={e => (e.target.style.color = '#f57c00')}
-            onMouseLeave={e => (e.target.style.color = '#3f51b5')}
           >
             Login
           </span>
         </Alert>
       </Snackbar>
 
-      <h2>Departments</h2>
-      <Button variant="contained" component={Link} to="/add-department" sx={{ marginBottom: '1rem' }}>
+      {/* Page title */}
+      <h2 id="department-list-title">Departments</h2>
+
+      {/* Add Department */}
+      <Button
+        id="department-add-btn"
+        variant="contained"
+        component={Link}
+        to="/add-department"
+        sx={{ marginBottom: '1rem' }}
+      >
         Add Department
       </Button>
+
+      {/* Search field */}
       <TextField
+        id="department-search-input"
         label="Search for a department"
         variant="outlined"
         value={searchTerm}
         onChange={handleSearchChange}
         sx={{ marginBottom: '1rem', width: '100%' }}
       />
-      <TableContainer component={Paper}>
-        <Table>
+
+      {/* Table */}
+      <TableContainer id="department-table-container" component={Paper}>
+        <Table id="department-table">
           <TableHead>
-            <TableRow>
+            <TableRow id="department-table-head">
               <TableCell>Name</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {filteredDepartments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(department => (
-              <TableRow key={department.id}>
-                <TableCell>{department.name}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    component={Link}
-                    to={`/edit-department/${department.id}`}
-                    sx={{ marginRight: '0.5rem', marginBottom: '0.25rem' }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleDelete(department.id)}
-                    sx={{ marginBottom: '0.25rem' }}
-                    disabled={deletingDepartmentId === department.id}
-                    startIcon={deletingDepartmentId === department.id ? <CircularProgress size={20} /> : null}
-                  >
-                    {deletingDepartmentId === department.id ? 'Deleting...' : 'Delete'}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+
+          <TableBody id="department-table-body">
+            {filteredDepartments
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(dep => (
+                <TableRow id={`department-row-${dep.id}`} key={dep.id}>
+                  <TableCell id={`department-name-${dep.id}`}>{dep.name}</TableCell>
+
+                  <TableCell>
+                    <Button
+                      id={`department-edit-btn-${dep.id}`}
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      to={`/edit-department/${dep.id}`}
+                      sx={{ marginRight: '0.5rem' }}
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      id={`department-delete-btn-${dep.id}`}
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDelete(dep.id)}
+                      disabled={deletingDepartmentId === dep.id}
+                      startIcon={
+                        deletingDepartmentId === dep.id ? (
+                          <CircularProgress id={`department-delete-spinner-${dep.id}`} size={20} />
+                        ) : null
+                      }
+                    >
+                      {deletingDepartmentId === dep.id ? 'Deleting...' : 'Delete'}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination */}
       <TablePagination
+        id="department-pagination"
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={filteredDepartments.length}

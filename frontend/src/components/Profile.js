@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Link } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getAllEmployees } from '../services/employeeService';
 import { getAllDepartments } from '../services/departmentService';
@@ -19,10 +19,9 @@ const Profile = ({ theme }) => {
       if (token) {
         setIsLoggedIn(true);
       } else {
-        setShowSnackbar(true); // Show the snackbar notification
+        setShowSnackbar(true);
       }
     };
-
     checkLoginStatus();
   }, [navigate]);
 
@@ -43,7 +42,6 @@ const Profile = ({ theme }) => {
       }
       setLoading(false);
     };
-
     fetchData();
   }, []);
 
@@ -59,19 +57,19 @@ const Profile = ({ theme }) => {
   if (!isLoggedIn) {
     return (
       <>
-        <Snackbar open={showSnackbar} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} sx={{ mt: 9 }}>
-          <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
+        <Snackbar
+          id="profile-login-snackbar"
+          open={showSnackbar}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          sx={{ mt: 9 }}
+        >
+          <Alert id="profile-login-alert" onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
             You must be logged in to view your profile.{' '}
             <span
+              id="profile-login-redirect-link"
               onClick={handleLoginRedirect}
-              style={{
-                color: '#3f51b5',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                transition: 'color 0.1s',
-              }}
-              onMouseEnter={e => (e.target.style.color = '#f57c00')}
-              onMouseLeave={e => (e.target.style.color = '#3f51b5')}
+              style={{ color: '#3f51b5', textDecoration: 'underline', cursor: 'pointer' }}
             >
               Login
             </span>
@@ -85,6 +83,7 @@ const Profile = ({ theme }) => {
   if (loading) {
     return (
       <Box
+        id="profile-loading"
         sx={{
           display: 'flex',
           justifyContent: 'center',
@@ -93,7 +92,7 @@ const Profile = ({ theme }) => {
           backgroundColor: theme === 'dark' ? '#222' : '#f4f4f4',
         }}
       >
-        <CircularProgress />
+        <CircularProgress id="profile-loading-spinner" />
       </Box>
     );
   }
@@ -115,6 +114,7 @@ const Profile = ({ theme }) => {
 
   return (
     <Box
+      id="profile-container"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -123,14 +123,14 @@ const Profile = ({ theme }) => {
         backgroundColor: theme === 'dark' ? '#222' : '#f4f4f4',
         paddingTop: 8,
         paddingBottom: 20,
-        transition: 'background-color 0.3s ease',
       }}
     >
-      <Typography variant="h4" sx={{ textAlign: 'center', marginBottom: 4 }}>
+      <Typography id="profile-title" variant="h4" sx={{ textAlign: 'center', marginBottom: 4 }}>
         Welcome, {profileData.username}!
       </Typography>
 
       <Box
+        id="profile-info-card"
         sx={{
           backgroundColor: theme === 'dark' ? '#333' : '#fff',
           color: theme === 'dark' ? '#fff' : '#000',
@@ -139,10 +139,10 @@ const Profile = ({ theme }) => {
           width: '400px',
           textAlign: 'center',
           boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-          transition: 'background-color 0.3s ease',
         }}
       >
         <Box
+          id="profile-avatar-box"
           sx={{
             width: 150,
             height: 150,
@@ -152,40 +152,51 @@ const Profile = ({ theme }) => {
             border: '3px solid #3f51b5',
           }}
         >
-          <img src={avatarUrl} alt="User Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img
+            id="profile-avatar-img"
+            src={avatarUrl}
+            alt="User Avatar"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </Box>
 
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
+        <Typography id="profile-section-title" variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
           Profile Information
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1, fontSize: '16px' }}>
+        <Typography id="profile-username" variant="body1" sx={{ mb: 1 }}>
           <strong>Username:</strong> {profileData.username}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
+        <Typography id="profile-total-employees" variant="body1" sx={{ mb: 1 }}>
           <strong>Total Employees:</strong> {profileData.employeeCount}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
+        <Typography id="profile-departments" variant="body1" sx={{ mb: 1 }}>
           <strong>Departments:</strong> {profileData.departmentCount}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
+        <Typography id="profile-average-age" variant="body1" sx={{ mb: 1 }}>
           <strong>Average Age:</strong> {profileData.averageAge}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
+        <Typography id="profile-satisfaction" variant="body1" sx={{ mb: 1 }}>
           <strong>Job Satisfaction:</strong> {profileData.averageJobSatisfaction}
         </Typography>
 
-        <div style={{ height: 20, borderBottom: '1px solid #ccc' }}></div>
+        <div id="profile-divider" style={{ height: 20, borderBottom: '1px solid #ccc' }}></div>
 
-        <Typography variant="body1" sx={{ mt: 2 }}>
+        <Typography id="profile-thankyou" variant="body1" sx={{ mt: 2 }}>
           <strong>Thank you for using our platform today! 🚀</strong>
         </Typography>
 
-        <Button variant="contained" color="secondary" sx={{ mt: 3 }} onClick={handleLogout}>
+        <Button
+          id="profile-logout-btn"
+          variant="contained"
+          color="secondary"
+          sx={{ mt: 3 }}
+          onClick={handleLogout}
+        >
           Logout
         </Button>
       </Box>

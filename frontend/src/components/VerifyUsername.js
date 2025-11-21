@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Box, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // Correct useNavigate
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CircularProgress
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const VerifyUsername = () => {
   const [username, setUsername] = useState('');
@@ -27,7 +35,7 @@ const VerifyUsername = () => {
         setSuccess(true);
         setTimeout(() => {
           navigate(`/reset-password?username=${username}`);
-        }, 1000); // Redirect to reset password page after a short delay
+        }, 1000);
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Username not found.');
@@ -39,30 +47,81 @@ const VerifyUsername = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}>
+    <Box
+      id="verify-page-container"
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}
+    >
+      <Card
+        id="verify-card"
+        sx={{
+          width: '100%',
+          maxWidth: 400,
+          boxShadow: 3,
+          borderRadius: 4,
+          padding: 2,
+          backgroundColor: '#fff'
+        }}
+      >
         <CardContent>
-          <Typography variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '1rem' }}>
+          <Typography
+            id="verify-title"
+            variant="h5"
+            component="h2"
+            textAlign="center"
+            sx={{ marginBottom: '1rem' }}
+          >
             Verify Username
           </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField fullWidth label="Username" value={username} onChange={e => setUsername(e.target.value)} sx={{ marginBottom: '1rem' }} />
+
+          <form id="verify-form" onSubmit={handleSubmit}>
+            <TextField
+              id="verify-username-input"
+              fullWidth
+              label="Username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+            />
+
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
+              <Box id="verify-loading" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress id="verify-loading-spinner" />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button
+                id="verify-submit-btn"
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Verify Username
               </Button>
             )}
+
             {error && (
-              <Typography color="error" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="verify-error-msg"
+                color="error"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 {error}
               </Typography>
             )}
+
             {success && (
-              <Typography color="primary" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="verify-success-msg"
+                color="primary"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 Username verified! Redirecting to reset password...
               </Typography>
             )}

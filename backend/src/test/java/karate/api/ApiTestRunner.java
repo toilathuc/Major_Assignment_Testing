@@ -1,9 +1,5 @@
-package karate;
+package karate.api;
 
-import com.intuit.karate.Results;
-import com.intuit.karate.Runner;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 import com.intuit.karate.junit5.Karate;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +10,7 @@ import com.example.employeemanagement.EmployeeManagementApplication;
 
 @SpringBootTest(classes = EmployeeManagementApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class RunKarateWithSpringBootTest {
+public class ApiTestRunner {
 
 	@LocalServerPort
 	private int port;
@@ -31,7 +27,7 @@ public class RunKarateWithSpringBootTest {
 
 	@Karate.Test
 	Karate testAuthBasic() {
-		return Karate.run("classpath:karate/auth_basic.feature")
+		return Karate.run("classpath:karate/api/auth_basic.feature")
 				.systemProperty("baseUrl", "http://localhost:" + port)
 				.relativeTo(getClass());
 	}
@@ -44,28 +40,30 @@ public class RunKarateWithSpringBootTest {
 	// }
 	@Karate.Test
 	Karate testDepartments() {
-		return Karate.run("classpath:karate/departmentsAPI.feature")
+		return Karate.run("classpath:karate/api/departmentsAPI.feature")
 				.systemProperty("baseUrl", "http://localhost:" + port)
 				.relativeTo(getClass());
 	}
 
 	@Karate.Test
 	Karate testEmployees() {
-		return Karate.run("classpath:karate/employees.feature")
+		return Karate.run("classpath:karate/api/employees.feature")
 				.systemProperty("baseUrl", "http://localhost:" + port)
 				.relativeTo(getClass());
 	}
 
 	@Karate.Test
 	Karate testHomeRedirect() {
-		return Karate.run("classpath:karate/home.feature")
+		return Karate.run("classpath:karate/api/home.feature")
 				.systemProperty("baseUrl", "http://localhost:" + port)
 				.relativeTo(getClass());
 	}
 	@Karate.Test
 	Karate TestSecurity() {
-		return Karate.run("classpath:karate/security.feature")
+		return Karate.run("classpath:karate/api/security.feature")
 				.systemProperty("baseUrl", "http://localhost:" + port)
 				.relativeTo(getClass());
 	}
+
+
 }

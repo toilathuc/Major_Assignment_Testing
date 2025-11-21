@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CircularProgress,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -27,44 +37,67 @@ const Login = () => {
       setLoading(false);
 
       if (response.ok) {
-        localStorage.setItem('token', data.token); // Store token in localStorage
-        localStorage.setItem('EMSusername', username); // Store username in localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('EMSusername', username);
+
         alert('Login successful. Welcome!');
-        navigate('/dashboard'); // Correct navigation after login success
+        navigate('/dashboard');
       } else {
         setError('Invalid credentials. Please try again.');
       }
     } catch (err) {
       setLoading(false);
-      setError('Invalid credentials or our server is not currently active. Please try again later.');
+      setError('Invalid credentials or server inactive. Try again later.');
     }
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}>
+    <Box
+      id="login-page-container"
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}
+    >
+      <Card
+        id="login-card"
+        sx={{
+          width: '100%',
+          maxWidth: 400,
+          boxShadow: 3,
+          borderRadius: 4,
+          padding: 2,
+          backgroundColor: '#fff'
+        }}
+      >
         <CardContent>
-          <Typography variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '1rem' }}>
+          <Typography
+            id="login-title"
+            variant="h5"
+            component="h2"
+            textAlign="center"
+            sx={{ marginBottom: '1rem' }}
+          >
             Login
           </Typography>
-          <form onSubmit={handleSubmit}>
+
+          <form id="login-form" onSubmit={handleSubmit}>
+
+            {/* USERNAME INPUT */}
             <TextField
+              id="login-username-input"
               fullWidth
               label="Username"
               value={username}
               onChange={e => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              InputProps={{
-                style: {
-                  fontFamily: 'Poppins, sans-serif',
-                },
-              }}
             />
+
+            {/* PASSWORD INPUT */}
             <TextField
+              id="login-password-input"
               fullWidth
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -74,39 +107,70 @@ const Login = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleTogglePasswordVisibility} edge="end">
+                    <IconButton
+                      id="login-toggle-password-btn"
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
-                style: {
-                  fontFamily: 'Poppins, sans-serif',
-                },
+                )
               }}
             />
+
+            {/* LOADING SPINNER OR LOGIN BUTTON */}
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
+              <Box id="login-loading" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress id="login-loading-spinner" />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button
+                id="login-submit-btn"
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Login
               </Button>
             )}
+
+            {/* ERROR MESSAGE */}
             {error && (
-              <Typography color="error" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="login-error-msg"
+                color="error"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 {error}
               </Typography>
             )}
+
+            {/* REGISTER LINK */}
             <Typography textAlign="center" sx={{ marginTop: '1rem' }}>
-              Don't have an account?{' '}
-              <Button color="primary" component="a" href="/register">
+              Don’t have an account?{' '}
+              <Button
+                id="login-register-link"
+                color="primary"
+                component="a"
+                href="/register"
+              >
                 Register
               </Button>
             </Typography>
+
+            {/* RESET PASSWORD LINK */}
             <Typography textAlign="center" sx={{ marginTop: '0.5rem' }}>
               Forgot your password?{' '}
-              <Button color="primary" component="a" href="/verify-username">
+              <Button
+                id="login-reset-password-link"
+                color="primary"
+                component="a"
+                href="/verify-username"
+              >
                 Reset Password
               </Button>
             </Typography>
