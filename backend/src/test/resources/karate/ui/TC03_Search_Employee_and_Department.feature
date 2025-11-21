@@ -42,8 +42,8 @@ Feature: Search Employees and Departments
 
     # Search field exists
     And waitFor('#department-search-input')
-    And input('#department-search-input', 'Entertainment')
+    And input('#department-search-input', 'Design')
 
     # Ensure filtered results appear
     And retry(20, 300).waitFor('#department-table-body')
-    And match text('#department-table-body') contains 'Entertainment'
+    And match text('#department-table-body') contains 'Design'

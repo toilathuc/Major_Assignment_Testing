@@ -48,11 +48,11 @@ Feature: Add Employee
     And waitFor('#employee-department-select')
     When click('#employee-department-select')
 
-    # Wait for list item (Entertainment)
-    And retry(20, 300).waitFor("//li[contains(text(),'Entertainment')]")
+    # Wait for list item (Design)
+    And retry(20, 300).waitFor("//li[contains(text(),'Design')]")
 
-    # Select Entertainment
-    And click("//li[contains(text(),'Entertainment')]")
+    # Select Design
+    And click("//li[contains(text(),'Design')]")
 
     # --- SAVE EMPLOYEE ---
     When click('#employee-save-btn')
