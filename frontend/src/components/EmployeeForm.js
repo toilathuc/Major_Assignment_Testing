@@ -28,12 +28,14 @@ const EmployeeForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+
       try {
         const departmentsData = await getAllDepartments();
         setDepartments(departmentsData);
 
         if (id) {
           const employeeData = await getEmployeeById(id);
+
           if (employeeData) {
             setEmployee({
               firstName: employeeData.firstName || '',
@@ -46,23 +48,25 @@ const EmployeeForm = () => {
             });
           }
         }
-        setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setIsLoading(false);
+        console.error('Error loading employee form:', error);
       }
+
+      setIsLoading(false);
     };
+
     fetchData();
   }, [id]);
 
   const handleChange = e => {
     const { name, value } = e.target;
+
     if (name === 'department.id') {
       setEmployee({ ...employee, department: { id: value } });
     } else {
       setEmployee({
         ...employee,
-        [name]: name === 'age' ? Number(value) : value, // Convert age to number
+        [name]: name === 'age' ? Number(value) : value,
       });
     }
   };
@@ -70,44 +74,109 @@ const EmployeeForm = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       if (id) {
         await updateEmployee(id, employee);
       } else {
         await addEmployee(employee);
       }
-      setIsLoading(false);
       navigate('/employees');
     } catch (error) {
       console.error('Error saving employee:', error);
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
+  // Loading overlay
   if (isLoading) {
     return (
-      <CenteredSpinner>
-        <CircularProgress />
+      <CenteredSpinner id="employee-form-loading">
+        <CircularProgress id="employee-form-spinner" />
       </CenteredSpinner>
     );
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' } }}>
-      <h2>{id ? 'Edit Employee' : 'Add Employee'}</h2>
-      <TextField label="First Name" name="firstName" value={employee.firstName} onChange={handleChange} required />
-      <TextField label="Last Name" name="lastName" value={employee.lastName} onChange={handleChange} required />
-      <TextField label="Email" name="email" type="email" value={employee.email} onChange={handleChange} required />
-      <TextField label="Age" name="age" type="number" value={employee.age} onChange={handleChange} required inputProps={{ min: 1, max: 150 }} />
-      <TextField select label="Department" name="department.id" value={employee.department.id || ''} onChange={handleChange} required>
-        <MenuItem value="">Select Department</MenuItem>
-        {departments.map(department => (
-          <MenuItem key={department.id} value={department.id}>
-            {department.name}
+    <Box
+      id="employee-form-container"
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' } }}
+    >
+      <h2 id="employee-form-title">{id ? 'Edit Employee' : 'Add Employee'}</h2>
+
+      <TextField
+        id="employee-firstname-input"
+        label="First Name"
+        name="firstName"
+        value={employee.firstName}
+        onChange={handleChange}
+        required
+      />
+
+      <TextField
+        id="employee-lastname-input"
+        label="Last Name"
+        name="lastName"
+        value={employee.lastName}
+        onChange={handleChange}
+        required
+      />
+
+      <TextField
+        id="employee-email-input"
+        label="Email"
+        name="email"
+        type="email"
+        value={employee.email}
+        onChange={handleChange}
+        required
+      />
+
+      <TextField
+        id="employee-age-input"
+        label="Age"
+        name="age"
+        type="number"
+        value={employee.age}
+        onChange={handleChange}
+        required
+        inputProps={{ min: 1, max: 150 }}
+      />
+
+      <TextField
+        id="employee-department-select"
+        select
+        label="Department"
+        name="department.id"
+        value={employee.department.id || ''}
+        onChange={handleChange}
+        required
+      >
+        <MenuItem id="employee-department-option-none" value="">
+          Select Department
+        </MenuItem>
+
+        {departments.map(dep => (
+          <MenuItem
+            id={`employee-department-option-${dep.id}`}
+            key={dep.id}
+            value={dep.id}
+          >
+            {dep.name}
           </MenuItem>
         ))}
       </TextField>
-      <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }}>
+
+      <Button
+        id="employee-save-btn"
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ marginTop: '1rem' }}
+      >
         Save
       </Button>
     </Box>

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const LandingPage = () => {
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
-  // Animation styles for subtle drop-down effect
   const animationStyle = {
     animation: 'dropDown 0.8s ease forwards',
     opacity: 0,
@@ -16,11 +15,15 @@ const LandingPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '2rem 0' }}>
-      {/* Main Content Container */}
+    <Box
+      id="landing-page-container"
+      sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '2rem 0' }}
+    >
       <Container maxWidth="lg">
-        {/* Welcome Box */}
+
+        {/* ================== WELCOME BOX ================== */}
         <Box
+          id="landing-welcome-box"
           sx={{
             ...animationStyle,
             textAlign: 'center',
@@ -30,13 +33,10 @@ const LandingPage = () => {
             color: 'white',
             borderRadius: 2,
             boxShadow: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
           }}
         >
           <Typography
+            id="landing-title"
             variant="h3"
             sx={{
               fontWeight: 600,
@@ -46,7 +46,9 @@ const LandingPage = () => {
           >
             Welcome to Employee Management System
           </Typography>
+
           <Typography
+            id="landing-subtitle"
             variant="h6"
             sx={{
               marginBottom: '2rem',
@@ -55,7 +57,9 @@ const LandingPage = () => {
           >
             A centralized solution for managing all your employee data efficiently and effectively.
           </Typography>
+
           <Button
+            id="landing-btn-dashboard"
             component={Link}
             to="/dashboard"
             variant="contained"
@@ -65,36 +69,36 @@ const LandingPage = () => {
               padding: '0.75rem 1.5rem',
               fontSize: '1rem',
               fontWeight: 600,
-              '&:hover': {
-                backgroundColor: '#e68900',
-              },
+              '&:hover': { backgroundColor: '#e68900' },
             }}
           >
             Go to Dashboard
           </Button>
         </Box>
 
-        {/* Features Section */}
+        {/* ================== FEATURE CARDS ================== */}
         <Grid container spacing={4} sx={{ marginTop: '2rem' }}>
+
+          {/* Manage Employees */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+            <Card id="landing-card-employees" sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
-                <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
+                <Typography id="landing-card-title-employees" variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
                   Manage Employees
                 </Typography>
                 <Typography variant="body1" sx={{ marginBottom: '1rem' }}>
                   Easily manage your employee records, track details, and maintain an up-to-date roster.
                 </Typography>
+
                 <Button
+                  id="landing-btn-view-employees"
                   component={Link}
                   to="/employees"
                   variant="contained"
                   sx={{
                     backgroundColor: '#3f51b5',
                     color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#333f91',
-                    },
+                    '&:hover': { backgroundColor: '#333f91' },
                   }}
                 >
                   View Employees
@@ -103,25 +107,26 @@ const LandingPage = () => {
             </Card>
           </Grid>
 
+          {/* Track Departments */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+            <Card id="landing-card-departments" sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
-                <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
+                <Typography id="landing-card-title-departments" variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
                   Track Departments
                 </Typography>
                 <Typography variant="body1" sx={{ marginBottom: '1rem' }}>
                   Organize your company’s structure with detailed information on each department.
                 </Typography>
+
                 <Button
+                  id="landing-btn-view-departments"
                   component={Link}
                   to="/departments"
                   variant="contained"
                   sx={{
                     backgroundColor: '#3f51b5',
                     color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#333f91',
-                    },
+                    '&:hover': { backgroundColor: '#333f91' },
                   }}
                 >
                   View Departments
@@ -130,25 +135,26 @@ const LandingPage = () => {
             </Card>
           </Grid>
 
+          {/* Analyze Growth */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+            <Card id="landing-card-growth" sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
-                <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
+                <Typography id="landing-card-title-growth" variant="h5" sx={{ fontWeight: 600, marginBottom: '1rem', color: '#3f51b5' }}>
                   Analyze Growth
                 </Typography>
                 <Typography variant="body1" sx={{ marginBottom: '1rem' }}>
                   Use our comprehensive dashboard to analyze employee growth and organizational structure.
                 </Typography>
+
                 <Button
+                  id="landing-btn-growth-dashboard"
                   component={Link}
                   to="/dashboard"
                   variant="contained"
                   sx={{
                     backgroundColor: '#3f51b5',
                     color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#333f91',
-                    },
+                    '&:hover': { backgroundColor: '#333f91' },
                   }}
                 >
                   Go to Dashboard
@@ -156,10 +162,12 @@ const LandingPage = () => {
               </CardContent>
             </Card>
           </Grid>
+
         </Grid>
 
-        {/* Additional Information Section */}
+        {/* ================== WHY CHOOSE SECTION ================== */}
         <Box
+          id="landing-why-choose"
           sx={{
             ...animationStyle,
             marginTop: '4rem',
@@ -170,16 +178,18 @@ const LandingPage = () => {
             boxShadow: 3,
           }}
         >
-          <Typography variant="h5" sx={{ marginBottom: '1rem', fontWeight: 600, color: '#3f51b5' }}>
+          <Typography id="landing-why-choose-title" variant="h5" sx={{ marginBottom: '1rem', fontWeight: 600, color: '#3f51b5' }}>
             Why Choose Our System?
           </Typography>
-          <Typography variant="body1" sx={{ maxWidth: '800px', margin: '0 auto' }}>
-            Our Employee Management System is designed to simplify HR processes, streamline department management, and provide valuable insights into your
-            workforce. Start using it today and experience the difference!
+          <Typography id="landing-why-choose-text" variant="body1" sx={{ maxWidth: '800px', margin: '0 auto' }}>
+            Our Employee Management System is designed to simplify HR processes, streamline department management,
+            and provide valuable insights into your workforce.
           </Typography>
         </Box>
 
+        {/* ================== LEARN MORE SECTION ================== */}
         <Box
+          id="landing-learn-more"
           sx={{
             ...animationStyle,
             marginTop: '4rem',
@@ -190,13 +200,15 @@ const LandingPage = () => {
             boxShadow: 3,
           }}
         >
-          <Typography variant="h5" sx={{ marginBottom: '1rem', fontWeight: 600, color: '#3f51b5' }}>
+          <Typography id="landing-learn-more-title" variant="h5" sx={{ marginBottom: '1rem', fontWeight: 600, color: '#3f51b5' }}>
             Learn More
           </Typography>
-          <Typography variant="body1" sx={{ maxWidth: '800px', margin: '0 auto' }}>
-            Visit our documentation to learn more about the features, functionalities, and how to get started with our Employee Management System.
+          <Typography id="landing-learn-more-text" variant="body1" sx={{ maxWidth: '800px', margin: '0 auto' }}>
+            Visit our documentation to learn more about the features, functionalities, and how to get started.
           </Typography>
+
           <Button
+            id="landing-btn-docs"
             href="https://github.com/hoangsonww/Employee-Management-Fullstack-App"
             target="_blank"
             variant="contained"
@@ -207,9 +219,7 @@ const LandingPage = () => {
               fontSize: '1rem',
               fontWeight: 600,
               marginTop: '1rem',
-              '&:hover': {
-                backgroundColor: '#333f91',
-              },
+              '&:hover': { backgroundColor: '#333f91' },
             }}
           >
             Documentation

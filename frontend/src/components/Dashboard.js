@@ -14,15 +14,17 @@ const Dashboard = () => {
   const [employeeGrowth, setEmployeeGrowth] = useState([]);
   const [ageRangeData, setAgeRangeData] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [genderData] = useState({ male: 175, female: 120 });
   const [jobSatisfactionData] = useState({ satisfied: 215, neutral: 50, dissatisfied: 30 });
   const [remoteWorkData] = useState({ onsite: 145, remote: 70, hybrid: 80 });
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Set loading to true when fetching data
+      setLoading(true);
       const employees = await getAllEmployees();
       const departments = await getAllDepartments();
+
       setEmployeeCount(employees.length);
       setDepartmentCount(departments.length);
 
@@ -39,11 +41,11 @@ const Dashboard = () => {
       };
 
       employees.forEach(emp => {
-        if (emp.age >= 20 && emp.age <= 29) ageRanges['20-29'] += 1;
-        else if (emp.age >= 30 && emp.age <= 39) ageRanges['30-39'] += 1;
-        else if (emp.age >= 40 && emp.age <= 49) ageRanges['40-49'] += 1;
-        else if (emp.age >= 50 && emp.age <= 59) ageRanges['50-59'] += 1;
-        else if (emp.age >= 60) ageRanges['60+'] += 1;
+        if (emp.age >= 20 && emp.age <= 29) ageRanges['20-29']++;
+        else if (emp.age >= 30 && emp.age <= 39) ageRanges['30-39']++;
+        else if (emp.age >= 40 && emp.age <= 49) ageRanges['40-49']++;
+        else if (emp.age >= 50 && emp.age <= 59) ageRanges['50-59']++;
+        else if (emp.age >= 60) ageRanges['60+']++;
       });
 
       setAgeRangeData(ageRanges);
@@ -57,8 +59,9 @@ const Dashboard = () => {
         { month: 'June', count: 200 },
       ]);
 
-      setLoading(false); // Set loading to false when data is fetched
+      setLoading(false);
     };
+
     fetchData();
   }, []);
 
@@ -78,8 +81,6 @@ const Dashboard = () => {
         label: 'Total Count',
         data: [employeeCount, departmentCount],
         backgroundColor: ['#3f51b5', '#ff9800'],
-        borderColor: ['#3f51b5', '#ff9800'],
-        borderWidth: 1,
       },
     ],
   };
@@ -91,8 +92,6 @@ const Dashboard = () => {
         label: 'Gender Distribution',
         data: [genderData.male, genderData.female],
         backgroundColor: ['#42A5F5', '#FF7043'],
-        borderColor: ['#ffffff'],
-        borderWidth: 1,
       },
     ],
   };
@@ -104,8 +103,6 @@ const Dashboard = () => {
         label: 'Job Satisfaction Levels',
         data: [jobSatisfactionData.satisfied, jobSatisfactionData.neutral, jobSatisfactionData.dissatisfied],
         backgroundColor: ['#81C784', '#FFEB3B', '#FF7043'],
-        borderColor: ['#ffffff'],
-        borderWidth: 1,
       },
     ],
   };
@@ -117,8 +114,6 @@ const Dashboard = () => {
         label: 'Remote Work Preference',
         data: [remoteWorkData.onsite, remoteWorkData.remote, remoteWorkData.hybrid],
         backgroundColor: ['#4FC3F7', '#FFB74D', '#9575CD'],
-        borderColor: ['#ffffff'],
-        borderWidth: 1,
       },
     ],
   };
@@ -134,19 +129,6 @@ const Dashboard = () => {
     ],
   };
 
-  const averageAgeChartData = {
-    labels: ['Average Age'],
-    datasets: [
-      {
-        label: 'Average Age of Employees',
-        data: [parseFloat(averageAge)],
-        backgroundColor: ['#8BC34A'],
-        borderColor: ['#8BC34A'],
-        borderWidth: 1,
-      },
-    ],
-  };
-
   const employeeGrowthData = employeeGrowth.length
     ? {
         labels: employeeGrowth.map(d => d.month),
@@ -155,8 +137,6 @@ const Dashboard = () => {
             label: 'Employee Growth Over Time',
             data: employeeGrowth.map(d => d.count),
             backgroundColor: '#36A2EB',
-            borderColor: '#36A2EB',
-            borderWidth: 1,
           },
         ],
       }
@@ -169,9 +149,7 @@ const Dashboard = () => {
           {
             label: 'Employee Growth Trend',
             data: employeeGrowth.map(d => d.count),
-            fill: false,
             borderColor: '#FF6384',
-            tension: 0.1,
           },
         ],
       }
@@ -184,8 +162,6 @@ const Dashboard = () => {
         label: 'Age Range Distribution',
         data: Object.values(ageRangeData),
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-        borderColor: ['#ffffff'],
-        borderWidth: 1,
       },
     ],
   };
@@ -193,147 +169,135 @@ const Dashboard = () => {
   if (loading) {
     return (
       <Box
+        id="dashboard-loading-overlay"
         sx={{
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: 'rgba(255,255,255,0.8)',
           zIndex: 1000,
         }}
       >
-        <CircularProgress />
+        <CircularProgress id="dashboard-loading-spinner" />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ marginTop: '2rem' }}>
-      <Typography variant="h4" component="h1" sx={{ marginBottom: '1rem', textAlign: 'center', fontWeight: 600 }}>
+    <Box id="dashboard-container" sx={{ marginTop: '2rem' }}>
+      <Typography id="dashboard-title" variant="h4" textAlign="center" sx={{ marginBottom: '2rem', fontWeight: 600 }}>
         Overview Dashboard
       </Typography>
+
       <Grid container spacing={3}>
-        {/* Metric Cards */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="card-total-employees" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6" textAlign="center">
-                Total Employees
-              </Typography>
-              <Typography variant="h4" textAlign="center">
-                {employeeCount}
-              </Typography>
+              <Typography>Total Employees</Typography>
+              <Typography id="value-total-employees" variant="h4">{employeeCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="card-average-age" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6" textAlign="center">
-                Average Age
-              </Typography>
-              <Typography variant="h4" textAlign="center">
-                {averageAge}
-              </Typography>
+              <Typography>Average Age</Typography>
+              <Typography id="value-average-age" variant="h4">{averageAge}</Typography>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="card-total-departments" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6" textAlign="center">
-                Total Departments
-              </Typography>
-              <Typography variant="h4" textAlign="center">
-                {departmentCount}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Chart Cards */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
-            <CardContent>
-              <Typography variant="h6">Total Overview</Typography>
-              <Bar data={totalOverviewData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 30 } } }} />
+              <Typography>Total Departments</Typography>
+              <Typography id="value-total-departments" variant="h4">{departmentCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-total-overview" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Employee Count by Age Range</Typography>
+              <Typography>Total Overview</Typography>
+              <Bar data={totalOverviewData} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Card id="chart-age-range" sx={{ ...animationStyle, boxShadow: 3 }}>
+            <CardContent>
+              <Typography>Employee Count by Age Range</Typography>
               <Bar data={ageRangeChartData} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-growth" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Employee Growth Over Time</Typography>
-              {employeeGrowthData ? <Bar data={employeeGrowthData} /> : <Typography>No data available</Typography>}
+              <Typography>Employee Growth Over Time</Typography>
+              {employeeGrowthData ? <Bar data={employeeGrowthData} /> : <Typography>No data</Typography>}
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-average-age" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Average Age of Employees</Typography>
-              <Bar data={averageAgeChartData} options={{ scales: { y: { beginAtZero: true, suggestedMax: 100 } } }} />
+              <Typography>Average Age of Employees</Typography>
+              <Bar data={ageRangeChartData} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-age-distribution" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Age Range Distribution</Typography>
+              <Typography>Age Range Distribution</Typography>
               <Pie data={pieChartData} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-growth-trend" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Employee Growth Trend</Typography>
-              {lineChartData ? <Line data={lineChartData} /> : <Typography>No data available</Typography>}
+              <Typography>Employee Growth Trend</Typography>
+              {lineChartData ? <Line data={lineChartData} /> : <Typography>No data</Typography>}
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-gender" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Gender Distribution</Typography>
-              <Bar data={genderChartData} options={{ scales: { y: { beginAtZero: true } } }} />
+              <Typography>Gender Distribution</Typography>
+              <Bar data={genderChartData} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-satisfaction" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Job Satisfaction Levels</Typography>
+              <Typography>Job Satisfaction Levels</Typography>
               <Pie data={jobSatisfactionChartData} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ ...animationStyle, boxShadow: 3, borderRadius: 2, height: '100%', backgroundColor: '#fff' }}>
+          <Card id="chart-remote-work" sx={{ ...animationStyle, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h6">Remote Work Preference</Typography>
+              <Typography>Remote Work Preference</Typography>
               <Pie data={remoteWorkChartData} />
             </CardContent>
           </Card>

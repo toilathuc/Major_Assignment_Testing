@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CircularProgress,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -15,7 +25,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get the username from the query params if available
+  // Get username from URL (?username=xxx)
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const usernameFromQuery = queryParams.get('username');
@@ -47,9 +57,7 @@ const ResetPassword = () => {
 
       if (response.ok) {
         setSuccess(true);
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000); // Redirect to login page after success
+        setTimeout(() => navigate('/login'), 2000);
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Error resetting password.');
@@ -60,24 +68,41 @@ const ResetPassword = () => {
     }
   };
 
-  const handleToggleNewPasswordVisibility = () => {
-    setShowNewPassword(!showNewPassword);
-  };
-
-  const handleToggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}>
+    <Box
+      id="reset-page-container"
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+    >
+      <Card
+        id="reset-card"
+        sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}
+      >
         <CardContent>
-          <Typography variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '1rem' }}>
+          <Typography
+            id="reset-title"
+            variant="h5"
+            component="h2"
+            textAlign="center"
+            sx={{ marginBottom: '1rem' }}
+          >
             Reset Password
           </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField fullWidth label="Username" value={username} onChange={e => setUsername(e.target.value)} disabled sx={{ marginBottom: '1rem' }} />
+
+          <form id="reset-form" onSubmit={handleSubmit}>
+
+            {/* USERNAME */}
             <TextField
+              id="reset-username-input"
+              fullWidth
+              label="Username"
+              value={username}
+              disabled
+              sx={{ marginBottom: '1rem' }}
+            />
+
+            {/* NEW PASSWORD */}
+            <TextField
+              id="reset-newpass-input"
               fullWidth
               label="New Password"
               type={showNewPassword ? 'text' : 'password'}
@@ -87,14 +112,22 @@ const ResetPassword = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleToggleNewPasswordVisibility} edge="end">
+                    <IconButton
+                      id="reset-toggle-newpass-btn"
+                      aria-label="toggle new password visibility"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      edge="end"
+                    >
                       {showNewPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
+
+            {/* CONFIRM NEW PASSWORD */}
             <TextField
+              id="reset-confirmpass-input"
               fullWidth
               label="Confirm New Password"
               type={showConfirmPassword ? 'text' : 'password'}
@@ -104,32 +137,60 @@ const ResetPassword = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle confirm password visibility" onClick={handleToggleConfirmPasswordVisibility} edge="end">
+                    <IconButton
+                      id="reset-toggle-confirmpass-btn"
+                      aria-label="toggle confirm password visibility"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
+
+            {/* LOADING SPINNER OR SUBMIT BUTTON */}
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
+              <Box id="reset-loading" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress id="reset-loading-spinner" />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button
+                id="reset-submit-btn"
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Reset Password
               </Button>
             )}
+
+            {/* ERROR MSG */}
             {error && (
-              <Typography color="error" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="reset-error-msg"
+                color="error"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 {error}
               </Typography>
             )}
+
+            {/* SUCCESS MSG */}
             {success && (
-              <Typography color="primary" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="reset-success-msg"
+                color="primary"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 Password reset successful! Redirecting to login...
               </Typography>
             )}
+
           </form>
         </CardContent>
       </Card>

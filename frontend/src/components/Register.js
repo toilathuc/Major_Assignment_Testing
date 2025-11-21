@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  CircularProgress,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,7 +45,7 @@ const Register = () => {
 
       if (response.ok) {
         alert('User registered successfully. Please login to continue.');
-        navigate('/login'); // Redirect to login page after successful registration
+        navigate('/login');
       } else {
         const data = await response.json();
         setError(data.message || 'Error registering user. Please try again.');
@@ -46,35 +56,41 @@ const Register = () => {
     }
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleToggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}>
+    <Box
+      id="register-page-container"
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+    >
+      <Card
+        id="register-card"
+        sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 4, padding: 2, backgroundColor: '#fff' }}
+      >
         <CardContent>
-          <Typography variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '1rem' }}>
+          <Typography
+            id="register-title"
+            variant="h5"
+            component="h2"
+            textAlign="center"
+            sx={{ marginBottom: '1rem' }}
+          >
             Register
           </Typography>
-          <form onSubmit={handleSubmit}>
+
+          <form id="register-form" onSubmit={handleSubmit}>
+
+            {/* USERNAME */}
             <TextField
+              id="register-username-input"
               fullWidth
               label="Username"
               value={username}
               onChange={e => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              InputProps={{
-                style: {
-                  fontFamily: 'Poppins, sans-serif',
-                },
-              }}
             />
+
+            {/* PASSWORD */}
             <TextField
+              id="register-password-input"
               fullWidth
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -84,17 +100,22 @@ const Register = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleTogglePasswordVisibility} edge="end">
+                    <IconButton
+                      id="register-toggle-password-btn"
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
-                style: {
-                  fontFamily: 'Poppins, sans-serif',
-                },
+                )
               }}
             />
+
+            {/* CONFIRM PASSWORD */}
             <TextField
+              id="register-confirm-password-input"
               fullWidth
               label="Confirm Password"
               type={showConfirmPassword ? 'text' : 'password'}
@@ -104,36 +125,61 @@ const Register = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle confirm password visibility" onClick={handleToggleConfirmPasswordVisibility} edge="end">
+                    <IconButton
+                      id="register-toggle-confirm-password-btn"
+                      aria-label="toggle confirm password visibility"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
-                style: {
-                  fontFamily: 'Poppins, sans-serif',
-                },
+                )
               }}
             />
+
+            {/* LOADING OR BUTTON */}
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
+              <Box id="register-loading" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress id="register-loading-spinner" />
               </Box>
             ) : (
-              <Button fullWidth variant="contained" color="primary" type="submit">
+              <Button
+                id="register-submit-btn"
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Register
               </Button>
             )}
+
+            {/* ERROR MESSAGE */}
             {error && (
-              <Typography color="error" textAlign="center" sx={{ marginTop: '1rem' }}>
+              <Typography
+                id="register-error-msg"
+                color="error"
+                textAlign="center"
+                sx={{ marginTop: '1rem' }}
+              >
                 {error}
               </Typography>
             )}
+
+            {/* LINK TO LOGIN */}
             <Typography textAlign="center" sx={{ marginTop: '1rem' }}>
               Already have an account?{' '}
-              <Button color="primary" component="a" href="/login">
+              <Button
+                id="register-login-link"
+                color="primary"
+                component="a"
+                href="/login"
+              >
                 Login
               </Button>
             </Typography>
+
           </form>
         </CardContent>
       </Card>
