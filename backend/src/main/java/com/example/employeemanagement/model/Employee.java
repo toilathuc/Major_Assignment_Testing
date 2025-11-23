@@ -29,6 +29,7 @@ public class Employee {
   private String lastName;
 
   /** The email of the employee. */
+  @Column(unique = true, nullable = false)
   private String email;
 
   /** The department of the employee. */

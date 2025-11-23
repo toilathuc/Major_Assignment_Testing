@@ -5,9 +5,13 @@ Feature: Department Database Testing
     * def DbUtils = Java.type('com.example.employeemanagement.util.DbUtils')
     * def db = new DbUtils(config.db)
 
+  Scenario: Check departments exist
+    * def rows = db.readRows("SELECT * FROM departments")
+    * assert rows.length >= 1
+
   Scenario: Count departments
     * def rows = db.readRows("SELECT * FROM departments")
-    * match rows.length >= 1
+    * assert rows.length >= 1
 
   Scenario: Insert a new department
     * def inserted = db.execute("INSERT INTO departments(name) VALUES ('IT Support')")

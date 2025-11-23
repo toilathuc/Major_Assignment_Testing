@@ -14,14 +14,14 @@ Scenario: Check exits of any employee
     * print response
     * def emID = response[0].id
     * print emID
-    
+
     Given url baseUrl + '/api/employees/' + emID
     When method GET
     Then status 200
 
-Scenario: 
+Scenario:
     Given url baseUrl + '/api/employees/999999'
-    When method GET 
+    When method GET
     Then status 404
 
 Scenario: Update information of a specific employee
@@ -55,7 +55,7 @@ Scenario: Update information of a specific employee
     * print response
     Then status 200
 
-    
+
     # * def update = {"firstName": "Thuc", "lastName": "Le Huy "}
     # Given url baseUrl + '/api/employees/'+ emID
     # When method PUT
