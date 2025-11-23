@@ -1,6 +1,7 @@
 Feature: Navbar navigation
 
   Background:
+    * call read('classpath:karate/ui/common.feature')
     # 0) Open Login page
     * driver 'http://localhost:3000/login'
     * retry(20, 500).waitFor('#login-title')

@@ -1,5 +1,8 @@
 Feature: Logout
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
 Scenario: TC12 - Logout redirects correctly
 
   # --- LOGIN ---

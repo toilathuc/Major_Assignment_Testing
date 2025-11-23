@@ -1,5 +1,9 @@
 Feature: Delete Employee
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
   Scenario: TC06 - Delete first employee from the list
 
     # --- LOGIN ---

@@ -1,5 +1,9 @@
 Feature: Load Profile page
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
   Scenario: TC11 - Login and load Profile page
     # --- LOGIN ---
     Given driver 'http://localhost:3000/login'

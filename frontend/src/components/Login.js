@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  CircularProgress,
-  IconButton,
-  InputAdornment
-} from '@mui/material';
+import { TextField, Button, Card, CardContent, Typography, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -26,6 +16,12 @@ const Login = () => {
     setLoading(true);
     setError('');
 
+    if (!username || !password) {
+      setLoading(false);
+      setError('Username and password required');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8080/authenticate', {
         method: 'POST',
@@ -40,14 +36,13 @@ const Login = () => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('EMSusername', username);
 
-        alert('Login successful. Welcome!');
         navigate('/dashboard');
       } else {
-        setError('Invalid credentials. Please try again.');
+        setError('Invalid credentials');
       }
     } catch (err) {
       setLoading(false);
-      setError('Invalid credentials or server inactive. Try again later.');
+      setError('Invalid credentials');
     }
   };
 
@@ -58,7 +53,7 @@ const Login = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh'
+        height: '100vh',
       }}
     >
       <Card
@@ -69,22 +64,15 @@ const Login = () => {
           boxShadow: 3,
           borderRadius: 4,
           padding: 2,
-          backgroundColor: '#fff'
+          backgroundColor: '#fff',
         }}
       >
         <CardContent>
-          <Typography
-            id="login-title"
-            variant="h5"
-            component="h2"
-            textAlign="center"
-            sx={{ marginBottom: '1rem' }}
-          >
+          <Typography id="login-title" variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '1rem' }}>
             Login
           </Typography>
 
-          <form id="login-form" onSubmit={handleSubmit}>
-
+          <form id="login-form" onSubmit={handleSubmit} noValidate>
             {/* USERNAME INPUT */}
             <TextField
               id="login-username-input"
@@ -116,7 +104,7 @@ const Login = () => {
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
@@ -126,25 +114,14 @@ const Login = () => {
                 <CircularProgress id="login-loading-spinner" />
               </Box>
             ) : (
-              <Button
-                id="login-submit-btn"
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
+              <Button id="login-submit-btn" fullWidth variant="contained" color="primary" type="submit">
                 Login
               </Button>
             )}
 
             {/* ERROR MESSAGE */}
             {error && (
-              <Typography
-                id="login-error-msg"
-                color="error"
-                textAlign="center"
-                sx={{ marginTop: '1rem' }}
-              >
+              <Typography id="login-error" color="error" textAlign="center" sx={{ marginTop: '1rem' }}>
                 {error}
               </Typography>
             )}
@@ -152,12 +129,7 @@ const Login = () => {
             {/* REGISTER LINK */}
             <Typography textAlign="center" sx={{ marginTop: '1rem' }}>
               Don’t have an account?{' '}
-              <Button
-                id="login-register-link"
-                color="primary"
-                component="a"
-                href="/register"
-              >
+              <Button id="login-register-link" color="primary" component="a" href="/register">
                 Register
               </Button>
             </Typography>
@@ -165,12 +137,7 @@ const Login = () => {
             {/* RESET PASSWORD LINK */}
             <Typography textAlign="center" sx={{ marginTop: '0.5rem' }}>
               Forgot your password?{' '}
-              <Button
-                id="login-reset-password-link"
-                color="primary"
-                component="a"
-                href="/verify-username"
-              >
+              <Button id="login-reset-password-link" color="primary" component="a" href="/verify-username">
                 Reset Password
               </Button>
             </Typography>

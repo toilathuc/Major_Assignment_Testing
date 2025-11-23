@@ -14,8 +14,7 @@ const CenteredSpinner = styled('div')({
 
 const EmployeeForm = () => {
   const [employee, setEmployee] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
     age: '',
     department: { id: '' },
@@ -24,6 +23,13 @@ const EmployeeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    age: '',
+    department: '',
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +44,7 @@ const EmployeeForm = () => {
 
           if (employeeData) {
             setEmployee({
-              firstName: employeeData.firstName || '',
-              lastName: employeeData.lastName || '',
+              name: `${employeeData.firstName || ''} ${employeeData.lastName || ''}`.trim(),
               email: employeeData.email || '',
               age: employeeData.age || '',
               department: {
@@ -66,20 +71,72 @@ const EmployeeForm = () => {
     } else {
       setEmployee({
         ...employee,
-        [name]: name === 'age' ? Number(value) : value,
+        [name]: value,
       });
     }
   };
 
+  const validate = () => {
+    let tempErrors = { name: '', email: '', age: '', department: '' };
+    let isValid = true;
+
+    if (!employee.name) {
+      tempErrors.name = 'Name is required';
+      isValid = false;
+    }
+
+    if (!employee.email) {
+      tempErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(employee.email)) {
+      tempErrors.email = 'Invalid email';
+      isValid = false;
+    }
+
+    if (!employee.age) {
+      tempErrors.age = 'Age is required';
+      isValid = false;
+    } else {
+      const ageNum = Number(employee.age);
+      if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
+        tempErrors.age = 'Invalid age';
+        isValid = false;
+      }
+    }
+
+    if (!employee.department.id) {
+      tempErrors.department = 'Department required';
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
+    if (!validate()) return;
+
     setIsLoading(true);
+
+    // Split name into first and last
+    const nameParts = employee.name.trim().split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ') || '.'; // Default last name if missing
+
+    const employeePayload = {
+      firstName,
+      lastName,
+      email: employee.email,
+      age: Number(employee.age),
+      department: { id: employee.department.id },
+    };
 
     try {
       if (id) {
-        await updateEmployee(id, employee);
+        await updateEmployee(id, employeePayload);
       } else {
-        await addEmployee(employee);
+        await addEmployee(employeePayload);
       }
       navigate('/employees');
     } catch (error) {
@@ -103,26 +160,19 @@ const EmployeeForm = () => {
       id="employee-form-container"
       component="form"
       onSubmit={handleSubmit}
+      noValidate
       sx={{ '& .MuiTextField-root': { marginBottom: '1rem', width: '100%' } }}
     >
       <h2 id="employee-form-title">{id ? 'Edit Employee' : 'Add Employee'}</h2>
 
       <TextField
-        id="employee-firstname-input"
-        label="First Name"
-        name="firstName"
-        value={employee.firstName}
+        id="employee-name-input"
+        label="Name"
+        name="name"
+        value={employee.name}
         onChange={handleChange}
-        required
-      />
-
-      <TextField
-        id="employee-lastname-input"
-        label="Last Name"
-        name="lastName"
-        value={employee.lastName}
-        onChange={handleChange}
-        required
+        error={!!errors.name}
+        helperText={errors.name && <span id="employee-name-error">{errors.name}</span>}
       />
 
       <TextField
@@ -132,7 +182,8 @@ const EmployeeForm = () => {
         type="email"
         value={employee.email}
         onChange={handleChange}
-        required
+        error={!!errors.email}
+        helperText={errors.email && <span id="employee-email-error">{errors.email}</span>}
       />
 
       <TextField
@@ -142,8 +193,9 @@ const EmployeeForm = () => {
         type="number"
         value={employee.age}
         onChange={handleChange}
-        required
         inputProps={{ min: 1, max: 150 }}
+        error={!!errors.age}
+        helperText={errors.age && <span id="employee-age-error">{errors.age}</span>}
       />
 
       <TextField
@@ -153,30 +205,21 @@ const EmployeeForm = () => {
         name="department.id"
         value={employee.department.id || ''}
         onChange={handleChange}
-        required
+        error={!!errors.department}
+        helperText={errors.department && <span id="employee-department-error">{errors.department}</span>}
       >
         <MenuItem id="employee-department-option-none" value="">
           Select Department
         </MenuItem>
 
         {departments.map(dep => (
-          <MenuItem
-            id={`employee-department-option-${dep.id}`}
-            key={dep.id}
-            value={dep.id}
-          >
+          <MenuItem id={`employee-department-option-${dep.id}`} key={dep.id} value={dep.id}>
             {dep.name}
           </MenuItem>
         ))}
       </TextField>
 
-      <Button
-        id="employee-save-btn"
-        type="submit"
-        variant="contained"
-        color="primary"
-        sx={{ marginTop: '1rem' }}
-      >
+      <Button id="employee-save-btn" type="submit" variant="contained" color="primary" sx={{ marginTop: '1rem' }}>
         Save
       </Button>
     </Box>

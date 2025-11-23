@@ -1,5 +1,9 @@
 Feature: Load Dashboard
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
   Scenario: TC10 - Load Dashboard and verify key widgets
 
     # --- LOGIN ---

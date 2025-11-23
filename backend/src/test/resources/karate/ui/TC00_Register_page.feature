@@ -1,5 +1,9 @@
 Feature: Register page
 
+
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
   Scenario: TC00 - Register a new account and redirect to Login
 
     # 1) Open Home page (LandingPage)

@@ -1,5 +1,8 @@
 Feature: Delete Department
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
 Scenario: TC09 - Delete first department from the list
   Given driver 'http://localhost:3000/login'
   And retry(40, 500).waitFor('#login-title')

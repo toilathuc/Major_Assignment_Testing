@@ -1,5 +1,10 @@
 Feature: Edit Department
 
+
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
 Scenario: TC08 - Edit first department and save
 
   # --- LOGIN ---

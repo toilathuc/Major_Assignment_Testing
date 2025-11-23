@@ -1,5 +1,9 @@
 Feature: Edit Employee happy path
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
 Scenario: TC05 - Edit first employee and save
     Given driver 'http://localhost:3000/login'
     And retry(40, 500).waitFor('#login-title')

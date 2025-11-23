@@ -1,5 +1,8 @@
 Feature: 404 Page
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
   Scenario: TC13 - Invalid URL shows 404 and Back to Home works
     Given driver 'http://localhost:3000/abcxyz'
 

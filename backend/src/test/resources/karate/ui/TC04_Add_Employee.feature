@@ -1,5 +1,9 @@
 Feature: Add Employee
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
   Scenario: TC04 - Login and add a new employee
 
     # --- PART 1: LOGIN ---

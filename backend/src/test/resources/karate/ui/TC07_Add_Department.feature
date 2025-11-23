@@ -1,5 +1,8 @@
 Feature: Add Department
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
   Scenario: TC07 - Add a new Department and verify in list
 
     * def deptName = 'Dept ' + java.util.UUID.randomUUID().toString().substring(0, 6)
@@ -19,7 +22,7 @@ Feature: Add Department
     # ADD NEW DEPT
     When click("a[href='/add-department']")
     And retry(40, 500).waitFor('#department-form-title')
-    And input('#department-name-input', deptName)
+    And input('#department-name-input', "Test")
     When click('#department-save-btn')
 
 

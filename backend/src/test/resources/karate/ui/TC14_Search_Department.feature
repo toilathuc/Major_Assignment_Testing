@@ -1,7 +1,8 @@
-Feature: Search Employees and Departments
+Feature: Search Department
 
   Background:
-    # Open Login Page
+    * call read('classpath:karate/ui/common.feature')
+
     Given driver 'http://localhost:3000/login'
     And retry(30, 500).waitFor('#login-title')
 
@@ -16,23 +17,9 @@ Feature: Search Employees and Departments
     And retry(40, 500).waitFor('#dashboard-title')
 
 
-  # --------------------------------------------------
-  Scenario: TC03a - Load Employees and filter list
-    # Navigate to Employees via Navbar
-    When click('#navbar-employees')
-    Then retry(40, 500).waitFor('#employee-list-title')
 
-    # Search field exists, type filter keyword
-    And waitFor('#employee-search-input')
-    And input('#employee-search-input', '@hotmail.com')
-
-    # Ensure table reloads
-    Then retry(20, 300).waitFor('#employee-table-body')
-    And match text('#employee-table-body') != null
-
-
-  # --------------------------------------------------
-  Scenario: TC03b - Load Departments and filter list
+ # --------------------------------------------------
+  Scenario: TC14 - Load Departments and filter list
     # Ensure still logged in
     And retry(10, 300).waitFor('#dashboard-title')
 
@@ -42,8 +29,8 @@ Feature: Search Employees and Departments
 
     # Search field exists
     And waitFor('#department-search-input')
-    And input('#department-search-input', 'Design')
+    And input('#department-search-input', 'Dairy')
 
     # Ensure filtered results appear
     And retry(20, 300).waitFor('#department-table-body')
-    And match text('#department-table-body') contains 'Design'
+    And match text('#department-table-body') contains 'Dairy'

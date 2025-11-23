@@ -1,5 +1,9 @@
 Feature: Login page
 
+  Background:
+    * call read('classpath:karate/ui/common.feature')
+
+
   Scenario: TC01 - Login and land on Dashboard
 
     # 1) Open Login page directly
