@@ -51,14 +51,13 @@ jobs:
 
 
   # ----------------------------------------------------
-  # JOB 2 — Performance Test + UI Test (MySQL Docker)
+  # JOB 2 — Performance Test (MySQL Docker)
   # ----------------------------------------------------
   test-mysql:
-    name: 🚀 Performance + UI Tests (MySQL Docker)
+    name: 🚀 Performance Tests (MySQL Docker)
     runs-on: ubuntu-latest
     needs: test-h2
 
-    # IMPORTANT: Run this job inside a Docker container
     container:
       image: maven:3.9.6-eclipse-temurin-17
 
@@ -81,7 +80,6 @@ jobs:
       - name: Install netcat
         run: apt-get update && apt-get install -y netcat
 
-
       # ------------------------
       # Build Backend
       # ------------------------
@@ -90,40 +88,31 @@ jobs:
         run: mvn -DskipTests package
 
       # ------------------------
-      # Wait for MySQL (avoid race condition)
+      # Wait for MySQL
       # ------------------------
       - name: Wait for MySQL
         run: |
           echo "⏳ Waiting for MySQL to become ready..."
-          for i in {1..15}; do
+          for i in {1..20}; do
             nc -z mysql 3306 && echo "✅ MySQL is UP!" && break
             echo "MySQL not ready yet..."
             sleep 2
           done
 
       # ------------------------
-      # Start Backend + Health Check
+      # Start Backend
       # ------------------------
       - name: Start Backend (application-docker.properties)
         working-directory: backend
         run: |
           nohup java -jar target/*.jar --spring.profiles.active=docker > app.log 2>&1 &
-          echo "Waiting backend to start..."
           sleep 15
-
-          echo "===== BACKEND LOG (latest 50 lines) ====="
           tail -n 50 app.log
-
-          echo "Checking backend port 8080..."
-          if nc -z localhost 8080; then
-            echo "✅ Backend is running on port 8080!"
-          else
-            echo "❌ Backend FAILED to start!"
-            exit 1
-          fi
+          nc -z localhost 8080 || (echo "❌ Backend FAILED!" && exit 1)
+          echo "✅ Backend running on port 8080"
 
       # ------------------------
-      # Run Performance Tests (Gatling + Karate)
+      # Run Performance Tests
       # ------------------------
       - name: Run Performance Tests (Gatling + Karate)
         working-directory: backend
@@ -131,8 +120,32 @@ jobs:
         continue-on-error: true
 
       # ------------------------
-      # Setup and Start Frontend
+      # Upload Reports
       # ------------------------
+      - name: Upload Performance Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-perf
+          path: |
+            backend/results/
+            backend/target/gatling/
+            backend/target/karate-reports/
+            backend/app.log
+
+
+  # ----------------------------------------------------
+  # JOB 3 — UI Test (Karate UI)
+  # ----------------------------------------------------
+  ui-test:
+    name: 🌐 UI Tests (Karate + Chrome)
+    runs-on: ubuntu-latest
+    needs: test-mysql
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -142,43 +155,25 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Start Frontend Server (Port 3000)
+      - name: Start Frontend
         working-directory: frontend
         run: |
           nohup npm start > ui.log 2>&1 &
-          echo "Waiting frontend to start..."
-          sleep 12
-
-          echo "===== FRONTEND LOG (latest 50 lines) ====="
+          sleep 10
           tail -n 50 ui.log
+          nc -z localhost 3000 || (echo "❌ Frontend FAILED to start!" && exit 1)
+          echo "✅ Frontend running on port 3000"
 
-          echo "Checking frontend port 3000..."
-          if nc -z localhost 3000; then
-            echo "✅ Frontend is running on port 3000!"
-          else
-            echo "❌ Frontend FAILED to start!"
-            exit 1
-          fi
-
-      # ------------------------
-      # Run Karate UI Tests
-      # ------------------------
       - name: Run Karate UI Tests
         working-directory: backend
         run: mvn --batch-mode -Dtest=UiTestRunner test
         continue-on-error: true
 
-      # ------------------------
-      # Upload All Reports
-      # ------------------------
-      - name: Upload MySQL Test Reports
+      - name: Upload UI Reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: reports-mysql
+          name: reports-ui
           path: |
-            backend/results/
-            backend/target/gatling/
             backend/target/karate-reports/
             frontend/ui.log
-            backend/app.log
