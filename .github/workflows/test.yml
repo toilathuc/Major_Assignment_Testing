@@ -1,0 +1,140 @@
+name: FULL CI PIPELINE (Backend + Frontend + API + Perf + UI)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  # ----------------------------------------------------
+  # JOB 1 — Unit Test + Karate API Test (H2 Database)
+  # ----------------------------------------------------
+  test-h2:
+    name: 🧪 Unit + API Tests (H2)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Run Unit Tests
+        working-directory: backend
+        run: mvn --batch-mode test
+
+      - name: Run Karate API Tests
+        working-directory: backend
+        run: mvn --batch-mode -Dtest=ApiTestRunner test
+      
+      - name: Run Karate Database Tests
+        working-directory: backend
+        run: mvn --batch-mode -Dtest=DatabaseTestRunner test
+
+      - name: Upload H2 Test Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-h2
+          path: |
+            backend/target/surefire-reports/
+            backend/target/karate-reports/
+
+  # ----------------------------------------------------
+  # JOB 2 — Performance Test + UI Test (MySQL Docker)
+  # ----------------------------------------------------
+  test-mysql:
+    name: 🚀 Performance + UI Tests (MySQL Docker)
+    runs-on: ubuntu-latest
+    needs: test-h2
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: employee_management
+          MYSQL_USER: springstudent
+          MYSQL_PASSWORD: springstudent
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=8
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # ------------------------
+      # Build Backend
+      # ------------------------
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build Backend
+        working-directory: backend
+        run: mvn -DskipTests package
+
+      # ------------------------
+      # Start backend with MySQL Docker profile
+      # ------------------------
+      - name: Start Backend (application-docker.properties)
+        working-directory: backend
+        run: |
+          nohup java -jar target/*.jar --spring.profiles.active=docker > app.log 2>&1 &
+          echo "Waiting backend to start..."
+          sleep 25
+          echo "Backend started."
+
+      # ------------------------
+      # Run Gatling + KaratePerformance Test
+      # ------------------------
+      - name: Run Performance Tests (Gatling + Karate)
+        working-directory: backend
+        run: mvn --batch-mode -Dtest=PerformanceTestRunner test
+
+      # ------------------------
+      # Run UI Karate Test
+      # ------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      # CHẠY FRONTEND SERVER
+      - name: Start Frontend Server
+        working-directory: frontend
+        run: |
+          nohup npm start > ui.log 2>&1 &
+          echo "Waiting frontend to start..."
+          sleep 10
+          echo "Frontend started."
+
+      - name: Run Karate UI Tests
+        working-directory: backend
+        run: mvn --batch-mode -Dtest=UiTestRunner test
+
+      # ------------------------
+      # Upload All Reports
+      # ------------------------
+      - name: Upload MySQL Test Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-mysql
+          path: |
+            backend/results/
+            backend/target/karate-reports/
+            backend/app.log
