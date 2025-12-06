@@ -49,6 +49,7 @@ jobs:
             backend/target/surefire-reports/
             backend/target/karate-reports/
 
+
   # ----------------------------------------------------
   # JOB 2 — Performance Test + UI Test (MySQL Docker)
   # ----------------------------------------------------
@@ -85,30 +86,39 @@ jobs:
       - name: Build Backend
         working-directory: backend
         run: mvn -DskipTests package
-        continue-on-error: true
 
       # ------------------------
-      # Start backend with MySQL Docker profile
+      # Start Backend + Health Check
       # ------------------------
       - name: Start Backend (application-docker.properties)
         working-directory: backend
         run: |
           nohup java -jar target/*.jar --spring.profiles.active=docker > app.log 2>&1 &
           echo "Waiting backend to start..."
-          sleep 25
-          echo "Backend started."
-        continue-on-error: true
+          sleep 15
+
+          echo "===== BACKEND LOG (latest 50 lines) ====="
+          tail -n 50 app.log
+
+          echo "Checking backend port 8080..."
+          if nc -z localhost 8080; then
+            echo "✅ Backend is running on port 8080!"
+          else
+            echo "❌ Backend FAILED to start!"
+            exit 1
+          fi
 
       # ------------------------
-      # Run Gatling + Karate Performance Test
+      # Run Performance Tests (Gatling + Karate)
       # ------------------------
       - name: Run Performance Tests (Gatling + Karate)
         working-directory: backend
         run: mvn --batch-mode -Dtest=PerformanceTestRunner test
         continue-on-error: true
 
+
       # ------------------------
-      # Run UI Karate UI Test
+      # Setup and Start Frontend
       # ------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -118,17 +128,28 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: npm ci
-        continue-on-error: true
 
-      - name: Start Frontend Server
+      - name: Start Frontend Server (Port 3000)
         working-directory: frontend
         run: |
           nohup npm start > ui.log 2>&1 &
           echo "Waiting frontend to start..."
-          sleep 10
-          echo "Frontend started."
-        continue-on-error: true
+          sleep 12
 
+          echo "===== FRONTEND LOG (latest 50 lines) ====="
+          tail -n 50 ui.log
+
+          echo "Checking frontend port 3000..."
+          if nc -z localhost 3000; then
+            echo "✅ Frontend is running on port 3000!"
+          else
+            echo "❌ Frontend FAILED to start!"
+            exit 1
+          fi
+
+      # ------------------------
+      # Run Karate UI Tests
+      # ------------------------
       - name: Run Karate UI Tests
         working-directory: backend
         run: mvn --batch-mode -Dtest=UiTestRunner test
