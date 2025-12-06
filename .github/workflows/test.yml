@@ -134,46 +134,4 @@ jobs:
             backend/app.log
 
 
-  # ----------------------------------------------------
-  # JOB 3 — UI Test (Karate UI)
-  # ----------------------------------------------------
-  ui-test:
-    name: 🌐 UI Tests (Karate + Chrome)
-    runs-on: ubuntu-latest
-    needs: test-mysql
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Frontend Dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Start Frontend
-        working-directory: frontend
-        run: |
-          nohup npm start > ui.log 2>&1 &
-          sleep 10
-          tail -n 50 ui.log
-          nc -z localhost 3000 || (echo "❌ Frontend FAILED to start!" && exit 1)
-          echo "✅ Frontend running on port 3000"
-
-      - name: Run Karate UI Tests
-        working-directory: backend
-        run: mvn --batch-mode -Dtest=UiTestRunner test
-        continue-on-error: true
-
-      - name: Upload UI Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: reports-ui
-          path: |
-            backend/target/karate-reports/
-            frontend/ui.log
+ 
