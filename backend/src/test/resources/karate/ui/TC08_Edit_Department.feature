@@ -30,8 +30,7 @@ Scenario: TC08 - Edit first department and save
   And waitFor('#department-name-input')
 
   # --- UPDATE NAME ---
-  * def original = script("document.querySelector('#department-name-input').value")
-  * def newName = original + ' Updated'
+  * def newName = ' Updated'
 
   * clear('#department-name-input')
   Then input('#department-name-input', newName)

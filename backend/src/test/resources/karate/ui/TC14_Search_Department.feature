@@ -29,8 +29,8 @@ Feature: Search Department
 
     # Search field exists
     And waitFor('#department-search-input')
-    And input('#department-search-input', 'Dairy')
+    And input('#department-search-input', 'E-Learning')
 
     # Ensure filtered results appear
     And retry(20, 300).waitFor('#department-table-body')
-    And match text('#department-table-body') contains 'Dairy'
+    And match text('#department-table-body') contains 'E-Learning'

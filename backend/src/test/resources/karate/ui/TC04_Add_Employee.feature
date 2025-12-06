@@ -36,11 +36,8 @@ Feature: Add Employee
     And retry(40, 500).waitFor('#employee-form-title')
 
     # --- PART 3: FILL EMPLOYEE FORM ---
-    And waitFor('#employee-firstname-input')
-    And input('#employee-firstname-input', 'Test123')
-
-    And waitFor('#employee-lastname-input')
-    And input('#employee-lastname-input', 'Karate')
+    And waitFor('#employee-name-input')
+    And input('#employee-name-input', 'Test123')
 
     And waitFor('#employee-email-input')
     And input('#employee-email-input', 'test.karate@example.com')
