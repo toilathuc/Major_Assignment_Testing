@@ -60,7 +60,7 @@ jobs:
 
     # IMPORTANT: Run this job inside a Docker container
     container:
-      image: eclipse-temurin:17-jdk
+      image: maven:3.9.6-eclipse-temurin-17
 
     services:
       mysql:
