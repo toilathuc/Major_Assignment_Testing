@@ -2,9 +2,11 @@ package com.example.employeemanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -13,7 +15,11 @@ import java.util.function.Function;
 public class JwtTokenUtil {
 
   /** The secret key. */
-  private String secret = "secretKey";
+  private static final String SECRET = "secretKeysecretKeysecretKeysecretKeysecretKey";
+
+  private SecretKey getSignInKey() {
+    return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+  }
 
   /**
    * Extract username.
@@ -55,7 +61,11 @@ public class JwtTokenUtil {
    * @return The claims
    */
   private Claims extractAllClaims(String token) {
-    return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    return Jwts.parser()
+        .verifyWith(getSignInKey())
+        .build()
+        .parseSignedClaims(token)
+        .getPayload();
   }
 
   /**
@@ -76,10 +86,10 @@ public class JwtTokenUtil {
    */
   public String generateToken(String username) {
     return Jwts.builder()
-        .setSubject(username)
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)) // 1 week validity
-        .signWith(SignatureAlgorithm.HS256, secret)
+        .subject(username)
+        .issuedAt(new Date())
+        .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)) // 1 week validity
+        .signWith(getSignInKey())
         .compact();
   }
 
