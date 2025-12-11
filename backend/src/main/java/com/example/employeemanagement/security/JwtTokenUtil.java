@@ -2,10 +2,10 @@ package com.example.employeemanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
@@ -14,13 +14,11 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-  /** The secret key. */
-  private static final String SECRET = "secretKey";
+  /** The secret key. Must be at least 256 bits for HS256. */
+  private static final String SECRET = "secretKeysecretKeysecretKeysecretKeysecretKey";
 
   private SecretKey getSignInKey() {
-    // Use the raw bytes of the secret string to avoid Base64 decoding issues with the short/invalid string.
-    // This ensures a valid key is generated, even if it differs from the legacy Base64-decoded key (which might have failed or been ambiguous).
-    return new SecretKeySpec(SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+    return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
   }
 
   /**
