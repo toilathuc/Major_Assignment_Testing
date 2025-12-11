@@ -2,11 +2,11 @@ package com.example.employeemanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -18,7 +18,7 @@ public class JwtTokenUtil {
   private static final String SECRET = "secretKey";
 
   private SecretKey getSignInKey() {
-    return new SecretKeySpec(SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+    return new SecretKeySpec(Decoders.BASE64.decode(SECRET), "HmacSHA256");
   }
 
   /**
