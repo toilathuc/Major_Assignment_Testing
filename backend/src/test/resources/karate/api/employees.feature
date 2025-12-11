@@ -8,7 +8,7 @@ Feature: Employee APIs
     * def email = 'john.doe_' + ts + '@example.com'
     * def employee = { firstName: 'John', lastName: 'Doe', email: email, age: 28 }
 Scenario: Check exits of any employee
-    Given url baseUrl + '/api/employees/'
+    Given url baseUrl + '/api/employees'
     When method GET
     Then status 200
     * print response
@@ -25,7 +25,7 @@ Scenario:
     Then status 404
 
 Scenario: Update information of a specific employee
-    Given url baseUrl + '/api/employees/'
+    Given url baseUrl + '/api/employees'
     When method GET
     Then status 200
     * print response

@@ -7,20 +7,20 @@ flowchart LR
     Client((User)) -->|NodePort 3001| FrontendSvc[Service: frontend-service]
     FrontendSvc --> FrontendDeploy[Deployment: frontend-deployment]
     FrontendDeploy --> FrontendPod[Pod: employee-management-frontend\ncontainerPort 3001]
-    FrontendPod -->|HTTP http://backend-service:3000| BackendSvc[Service: backend-service]
+    FrontendPod -->|HTTP http://backend-service:8080| BackendSvc[Service: backend-service]
     BackendSvc --> BackendDeploy[Deployment: backend-deployment]
-    BackendDeploy --> BackendPod[Pod: employee-management-backend\ncontainerPort 3000]
+    BackendDeploy --> BackendPod[Pod: employee-management-backend\ncontainerPort 8080]
 ```
 
 ## Files
 
 | File | Purpose |
 |------|---------|
-| `backend-deployment.yaml` | Deploys one backend pod (`employee-management-backend:latest`) exposing container port **3000**, with a `hostPath` volume that mounts code from the worker node directory `/home/user/project/backend` into `/app`. |
-| `backend-service.yaml` | ClusterIP service forwarding port **3000** to backend pods. No external exposure is provided. |
-| `frontend-deployment.yaml` | Deploys one frontend pod (`employee-management-frontend:latest`) exposing container port **3001**, mounting `/home/user/project/frontend` into `/app` using `hostPath`. Sets `REACT_APP_BACKEND_URL=http://backend-service:3000`. |
+| `backend-deployment.yaml` | Deploys one backend pod (`employee-management-backend:latest`) exposing container port **8080**, with a `hostPath` volume that mounts code from the worker node directory `/home/user/project/backend` into `/app`. |
+| `backend-service.yaml` | ClusterIP service forwarding port **8080** to backend pods. No external exposure is provided. |
+| `frontend-deployment.yaml` | Deploys one frontend pod (`employee-management-frontend:latest`) exposing container port **3001**, mounting `/home/user/project/frontend` into `/app` using `hostPath`. Sets `REACT_APP_BACKEND_URL=http://backend-service:8080`. |
 | `frontend-service.yaml` | NodePort service exposing port **3001** (Node port assigned automatically) for browser access. |
-| `configmap.yaml` | Stores `NODE_ENV=production` and `REACT_APP_BACKEND_URL=http://backend-service:3000`. Not currently referenced by the deployments. |
+| `configmap.yaml` | Stores `NODE_ENV=production` and `REACT_APP_BACKEND_URL=http://backend-service:8080`. Not currently referenced by the deployments. |
 
 ```mermaid
 flowchart TD
@@ -53,7 +53,7 @@ flowchart TD
 
 ## Important Notes
 
-- **Ports**: The manifests expose container ports `3000` (backend) and `3001` (frontend). Update them if you rebuild containers that listen on different ports (e.g., Spring Boot default `8080`).
+- **Ports**: The manifests expose container ports `8080` (backend) and `3001` (frontend).
 - **Volumes**: HostPath volumes tie pods to the node's filesystem. Replace them with ConfigMaps, Secrets, or persistent volumes before deploying to shared clusters.
 - **ConfigMap**: Although provided, the current deployments hardcode environment variables. Wire the ConfigMap via `envFrom` or `env` entries to adopt centralized configuration.
 - **Replica count**: Both deployments default to a single replica. Increase `spec.replicas` for redundancy once images and storage are stateless.

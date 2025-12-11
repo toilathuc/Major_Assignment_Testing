@@ -16,6 +16,8 @@ The backend of the Employee Management System is built using Spring Boot, a powe
 - **Spring Boot**: Framework for building production-ready applications with Java.
 - **MySQL**: Relational database for structured data storage.
 - **MongoDB**: NoSQL database for non-relational data storage.
+- **Karate**: Tool for API testing and test automation.
+- **JUnit 5**: Testing framework for Java.
 
 ## File Structure
 
@@ -67,7 +69,7 @@ employee-management-app
 
 ## Setup Instructions
 
-#### Important: Java 11 is required to run this project.
+#### Important: Java 21 is required to run this project.
 
 ### 1. Clone the Repository
 
@@ -78,7 +80,7 @@ cd Employee-Management/backend
 
 ### 2. Install Dependencies
 
-Ensure you have [Maven](https://maven.apache.org/) and [Java JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) installed. Run the following command to install the required dependencies:
+Ensure you have [Maven](https://maven.apache.org/) and [Java JDK 21](https://jdk.java.net/21/) installed. Run the following command to install the required dependencies:
 
 ```bash
 mvn install -DskipTests
@@ -97,6 +99,20 @@ spring.jpa.hibernate.ddl-auto=update
 
 # MongoDB Configuration
 spring.data.mongodb.uri=mongodb://localhost:27017/employee_management
+```
+
+### 4. Running Tests
+
+To run the tests, including unit tests and Karate API tests, use the following command:
+
+```bash
+mvn test
+```
+
+To run only the Karate API tests:
+
+```bash
+mvn test -Dtest=ApiTestRunner
 ```
 
 Ensure the databases are set up as expected and the URLs, usernames, and passwords match your local or remote database setup.
@@ -227,7 +243,7 @@ If you have everything set up correctly, you should see the Swagger UI with a li
 
 - **`CORS Error`**: If you encounter CORS issues, ensure that the `CorsConfig.java` class is correctly configured.
 
-- **`Build failed`**: If the Maven build fails, check if you are using Java 11 and have the necessary dependencies installed. Also, check the error logs for more details.
+- **`Build failed`**: If the Maven build fails, check if you are using Java 21 and have the necessary dependencies installed. Also, check the error logs for more details.
 
 ## Contributing
 

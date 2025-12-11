@@ -182,7 +182,8 @@ The backend is also deployed with Render and is available at [https://employee-m
   - **Spring Boot Starter Web**: A starter for building web applications, including RESTful, application, and WebSocket services.
   - **Spring Boot Starter Data JPA**: A starter for using Spring Data JPA with Hibernate.
   - **RESTful APIs**: Representational state transfer (REST) APIs for communication between the frontend and backend.
-  - **Java 11**: The latest LTS version of Java, providing long-term support and stability.
+  - **Java 21**: The latest LTS version of Java, providing long-term support, stability, and modern language features.
+  - **Karate**: A unified test automation platform for API testing, performance testing, and UI testing.
   - **JUnit 5**: A popular testing framework for Java that provides annotations for writing tests.
   - **Swagger**: A tool for documenting and testing RESTful APIs.
 - **Docker**: A containerization platform for packaging applications and their dependencies.
@@ -379,15 +380,15 @@ For a deeper dive into components, data flow, security posture, and recommended 
 
 ### 1. Prerequisites
 
-Ensure that you have Java 11 installed on your local machine. If not, follow the instructions below:
+Ensure that you have Java 21 installed on your local machine. If not, follow the instructions below:
 
 - For MacOS:
     ```bash
-    brew install openjdk@11
-    export JAVA_HOME=/usr/local/opt/openjdk@11
+    brew install openjdk@21
+    export JAVA_HOME=/usr/local/opt/openjdk@21
     ```
 
-- For Windows: Download OpenJDK 11 from [https://jdk.java.net/archive/](https://jdk.java.net/archive/) and follow the installation instructions.
+- For Windows: Download OpenJDK 21 from [https://jdk.java.net/archive/](https://jdk.java.net/archive/) and follow the installation instructions.
 
 - Also, ensure that MongoDB and MySQL are installed and running on your local machine.
 
@@ -486,7 +487,7 @@ The backend will be available at [http://localhost:8080](http://localhost:8080).
 
 ```mermaid
 flowchart TB
-    A[Install Java 11 & Maven] --> B[Clone repository]
+    A[Install Java 21 & Maven] --> B[Clone repository]
     B --> C[Configure application.properties or config.properties]
     C --> D[Start MySQL & MongoDB]
     D --> E[mvn spring-boot:run]
@@ -533,15 +534,22 @@ This application also uses Swagger to provide an interactive API documentation i
 - **Quick Testing**: Test the API endpoints directly from the browser without needing a separate tool.
 - **Clear Communication**: Provides a standardized way of documenting your API, making it easier for others to understand and consume.
 
-### 8. Backend JUnit Testing
+### 8. Backend Testing
 
-To run the unit and integration tests, use:
+To run the unit and integration tests (including JUnit 5 and Karate API tests), use:
 
 ```bash
 mvn test
 ```
 
-This will run the tests and provide you with the results. Ensure that all tests pass before making any changes to the application.
+This will run all tests and provide you with the results. Ensure that all tests pass before making any changes to the application.
+
+**Karate API Tests:**
+The project uses Karate for API testing. The feature files are located in `src/test/resources/karate`.
+To run only the Karate tests:
+```bash
+mvn test -Dtest=ApiTestRunner
+```
 
 Feel free to add more tests as needed to ensure the reliability and correctness of your application.
 
@@ -815,7 +823,7 @@ This guide enables you to view, test, and utilize the API. Feel free to explore 
 
 - **`Exception opening socket` for MongoDB**: Verify that MongoDB is running and accessible at `localhost:27017`. Check MongoDB logs for any connection issues.
 
-- **`Build failed`**: Ensure that you are using Java 11 and that all dependencies are correctly installed. Check the `pom.xml` file for any missing dependencies.
+- **`Build failed`**: Ensure that you are using Java 21 and that all dependencies are correctly installed. Check the `pom.xml` file for any missing dependencies.
 
 - Regardless of the error, perhaps you can try running the following commands to clean and rebuild the project:
 

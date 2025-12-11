@@ -7,7 +7,7 @@ This document captures the current architecture of the Employee Management Syste
 ## 1. Solution Overview
 
 - **Domain**: Manage employees and departments, including CRUD workflows, dashboard metrics, authentication stubs, and seeded demo data.
-- **Stack**: React 18 SPA with Material UI and Chart.js on the frontend, Spring Boot 2.7 on Java 11 for the backend, MySQL as the primary datastore, optional MongoDB connectivity, and Docker/Kubernetes/Terraform for packaging and deployment.
+- **Stack**: React 18 SPA with Material UI and Chart.js on the frontend, Spring Boot 3.3.5 on Java 21 for the backend, MySQL as the primary datastore, optional MongoDB connectivity, and Docker/Kubernetes/Terraform for packaging and deployment.
 - **Key Repos**: Frontend under `frontend/`, backend under `backend/`, infrastructure helpers under `docker-compose.yml`, `kubernetes/`, `terraform/`, and `scripts/`.
 
 ---
@@ -71,7 +71,7 @@ flowchart LR
 ### 3.1 Application entry
 
 - `EmployeeManagementApplication.java` (Spring Boot) bootstraps the application.
-- The project targets Java 11 (`pom.xml`) and integrates Spring Boot starters for web, data JPA, security, MongoDB, OpenAPI, and testing.
+- The project targets Java 21 (`pom.xml`) and integrates Spring Boot starters for web, data JPA, security, MongoDB, OpenAPI, and testing.
 
 ### 3.2 Domain model & persistence
 
