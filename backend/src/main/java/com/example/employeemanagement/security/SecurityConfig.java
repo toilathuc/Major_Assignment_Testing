@@ -1,33 +1,19 @@
 package com.example.employeemanagement.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 /** This class represents the security configuration. */
+@Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-  /** The user details service. */
-  @Autowired private UserDetailsService userDetailsService;
-
-  /**
-   * Configure authentication.
-   *
-   * @param auth The authentication manager builder
-   * @throws Exception If an error occurs
-   */
-  /*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/@Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  }
+public class SecurityConfig {
 
   /**
    * Password encoder.
@@ -42,29 +28,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   /**
    * Authentication manager bean.
    *
+   * @param authenticationConfiguration The authentication configuration
    * @return The authentication manager
    * @throws Exception If an error occurs
    */
-  /*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/@Override
   @Bean
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
   }
 
   /**
    * Configure security.
    *
    * @param http The HTTP security
+   * @return The security filter chain
    * @throws Exception If an error occurs
    */
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // Disable authentication for all routes
-    http.csrf(csrf -> csrf
-        .disable())
-        .authorizeHttpRequests(requests -> requests
-            .anyRequest()
-            .permitAll()); // Allow access to all routes without authentication (for now)
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(requests -> requests.anyRequest().permitAll()); // Allow access to all routes without authentication (for now)
     http.headers(headers -> headers.frameOptions(options -> options.disable()));
+    return http.build();
   }
 }
+

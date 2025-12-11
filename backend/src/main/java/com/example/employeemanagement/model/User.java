@@ -1,6 +1,6 @@
 package com.example.employeemanagement.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /** This class represents the user entity. */
 @Entity
