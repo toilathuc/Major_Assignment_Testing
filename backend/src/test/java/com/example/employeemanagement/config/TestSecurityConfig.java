@@ -27,7 +27,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @EnableMethodSecurity
 @Profile("test")
-@Order(1)
 public class TestSecurityConfig {
 
   @Autowired private JwtRequestFilter jwtRequestFilter;
@@ -40,6 +39,7 @@ public class TestSecurityConfig {
   }
 
   @Bean
+  @Order(1)
   public SecurityFilterChain testFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(requests -> requests
