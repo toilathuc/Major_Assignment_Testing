@@ -20,7 +20,7 @@
 
   <!-- Using Java 17 -->
   <properties>
-    <java.version>17</java.version>
+    <java.version>21</java.version>
   </properties>
 
   <dependencies>
@@ -54,7 +54,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.30</version>
+      <version>1.18.42</version>
       <scope>provided</scope>
     </dependency>
 
@@ -191,20 +191,19 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.14.1</version>
         <configuration>
-          <source>17</source>
-          <target>17</target>
           <fork>true</fork>
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
+          <release>${java.version}</release>
         </configuration>
       </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version> <configuration>
+                    <version>3.14.1</version> <configuration>
                     <source>17</source> <target>17</target>
                     <annotationProcessorPaths>
                         <path>

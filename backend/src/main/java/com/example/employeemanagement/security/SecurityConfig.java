@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    * @param auth The authentication manager builder
    * @throws Exception If an error occurs
    */
-  @Override
+  /*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/@Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    * @return The authentication manager
    * @throws Exception If an error occurs
    */
-  @Override
+  /*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/@Override
   @Bean
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
@@ -60,11 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     // Disable authentication for all routes
-    http.csrf()
-        .disable()
-        .authorizeRequests()
-        .anyRequest()
-        .permitAll(); // Allow access to all routes without authentication (for now)
-      http.headers().frameOptions().disable();
+    http.csrf(csrf -> csrf
+        .disable())
+        .authorizeHttpRequests(requests -> requests
+            .anyRequest()
+            .permitAll()); // Allow access to all routes without authentication (for now)
+    http.headers(headers -> headers.frameOptions(options -> options.disable()));
   }
 }
