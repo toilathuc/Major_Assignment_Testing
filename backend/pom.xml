@@ -64,6 +64,13 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
+    <!-- Override spring-security-crypto to fix CVE-2025-22228 -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-crypto</artifactId>
+      <version>6.3.8</version>
+    </dependency>
+
     <!-- JWT Dependencies -->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
